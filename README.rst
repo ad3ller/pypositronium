@@ -44,15 +44,6 @@ The package can now be imported into python.
 Basic Usage
 -----------
 
-The goal is to diagonalise the total Hamiltonian
-
-.. math::
-    \hat{H} = \hat{H}_{0} + \hat{H}_{S} + \hat{H}_{Z}
-   
-in a given field configuration, where the basis set is a list of instances of an 
-attrs class called State, each element of which represents
-:math:`| \, n \, \ell \, S \, J \, M_J \rangle`.  The basis is constructed as shown below.
-
 .. code:: ipython3
 
     from psfs import Hamiltonian
@@ -79,7 +70,8 @@ and `zeeman_map()`. These can be used to calculate the energy eigenvalues using 
 in a range of electric or magnetic fields.
 
 The accuracy of the results depends on the suitability of the basis set.  See the notebooks for examples.
-The notebooks require https://github.com/ad3ller/Stark-map-tools.
+
+Some of the notebooks require https://github.com/ad3ller/Stark-map-tools.
 
 Version information
 -------------------
