@@ -96,6 +96,8 @@ Examples
 
 This code has not been tested extensively.  But several published calculations have been successfully reproduced.
 
+----
+
 S\. M. Curry, *Phys. Rev. A*, **7** (2), 447 (1973) https://dx.doi.org/10.1103/PhysRevA.7.447
 
 .. figure:: ./images/zeeman_n2.png
@@ -103,6 +105,7 @@ S\. M. Curry, *Phys. Rev. A*, **7** (2), 447 (1973) https://dx.doi.org/10.1103/P
    
    **Fig. 2** Pure Zeeman effect in the first excited states of positronium.
 
+----
 
 A\. M. Alonso *et al.*, *Phys. Rev. A*, **93**, 012506 (2016) https://dx.doi.org/10.1103/PhysRevA.93.012506
  
@@ -116,6 +119,7 @@ A\. M. Alonso *et al.*, *Phys. Rev. A*, **93**, 012506 (2016) https://dx.doi.org
    
    **Fig. 6 c)** An expanded view of the avoided crossing.
 
+----
 
 G\. Dufour *et al.*, *Adv. High En. Phys.*, **2015**, 379642 (2015) https://dx.doi.org/10.1155/2015/379642
 
