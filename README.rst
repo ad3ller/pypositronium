@@ -65,7 +65,7 @@ Basic Usage
 
     State(n=1, l=0, S=0, J=0, MJ=0)
 
-Here, the object `mat` is an instance of the Hamiltonian class, which has methods that include `stark_map()`
+Here, `mat` is an instance of the `Hamiltonian` class, which has methods that include `stark_map()`
 and `zeeman_map()`. These can be used to calculate the energy eigenvalues using the initialised basis
 in a range of electric or magnetic fields.
 
