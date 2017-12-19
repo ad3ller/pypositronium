@@ -44,15 +44,6 @@ The package can now be imported into python.
 Basic Usage
 -----------
 
-The goal is to diagonalise the total Hamiltonian
-
-.. math::
-    \hat{H} = \hat{H}_{0} + \hat{H}_{S} + \hat{H}_{Z}
-   
-in a given field configuration, where the basis set is a list of instances of an 
-attrs class called State, each element of which represents
-:math:`| \, n \, \ell \, S \, J \, M_J \rangle`.  The basis is constructed as shown below.
-
 .. code:: ipython3
 
     from psfs import Hamiltonian
@@ -74,12 +65,13 @@ attrs class called State, each element of which represents
 
     State(n=1, l=0, S=0, J=0, MJ=0)
 
-Here, the object `mat` is an instance of the Hamiltonian class, which has methods that include `stark_map()`
+Here, `mat` is an instance of the `Hamiltonian` class, which has methods that include `stark_map()`
 and `zeeman_map()`. These can be used to calculate the energy eigenvalues using the initialised basis
 in a range of electric or magnetic fields.
 
 The accuracy of the results depends on the suitability of the basis set.  See the notebooks for examples.
-The notebooks require https://github.com/ad3ller/Stark-map-tools.
+
+Some of the notebooks require https://github.com/ad3ller/Stark-map-tools.
 
 Version information
 -------------------
@@ -104,6 +96,8 @@ Examples
 
 This code has not been tested extensively.  But several published calculations have been successfully reproduced.
 
+----
+
 S\. M. Curry, *Phys. Rev. A*, **7** (2), 447 (1973) https://dx.doi.org/10.1103/PhysRevA.7.447
 
 .. figure:: ./images/zeeman_n2.png
@@ -111,6 +105,7 @@ S\. M. Curry, *Phys. Rev. A*, **7** (2), 447 (1973) https://dx.doi.org/10.1103/P
    
    **Fig. 2** Pure Zeeman effect in the first excited states of positronium.
 
+----
 
 A\. M. Alonso *et al.*, *Phys. Rev. A*, **93**, 012506 (2016) https://dx.doi.org/10.1103/PhysRevA.93.012506
  
@@ -124,6 +119,7 @@ A\. M. Alonso *et al.*, *Phys. Rev. A*, **93**, 012506 (2016) https://dx.doi.org
    
    **Fig. 6 c)** An expanded view of the avoided crossing.
 
+----
 
 G\. Dufour *et al.*, *Adv. High En. Phys.*, **2015**, 379642 (2015) https://dx.doi.org/10.1155/2015/379642
 
