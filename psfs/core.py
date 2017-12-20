@@ -293,7 +293,7 @@ class Hamiltonian(object):
             eig_vec = np.empty((num_fields, self.num_states, self.num_states), dtype=float)
         elif eig_elements is not None:
             eig_amp = np.empty((num_fields, self.num_states), dtype=float)
-        # optional magentic field
+        # optional magnetic field
         if Bfield != 0.0:
             Bz = mu_B * Bfield / En_h
             mat_z =  self.zeeman_matrix(**kwargs)
