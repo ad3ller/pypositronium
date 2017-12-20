@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='psfs',
-      version='0.0.1.dev',
+      version='0.0.2.dev0',
       description='Calculate the Stark effect in Rydberg positronium',
       url='',
       author='Adam Deller',

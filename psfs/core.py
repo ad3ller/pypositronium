@@ -76,6 +76,11 @@ class State(object):
         ## no quantum defect
         self.n_eff = self.n #np.sqrt(- mu_me * 0.5 / self.E0)
 
+    def __str__(self):
+        """ print quantum numbers like |n l S J MJ >
+        """
+        return u"\u2758 {} {} {} {} {} \u27E9".format(self.n, self.l, self.S, self.J, self.MJ)
+
     def asdict(self):
         """ quantum numbers as a dictionary.
         """

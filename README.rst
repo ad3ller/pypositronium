@@ -1,4 +1,4 @@
-Positronium
+﻿Positronium
 ===========
 
 v0.0.1
@@ -58,16 +58,26 @@ Basic Usage
 
 .. code:: ipython3
 
+    mat.basis[0]
+
+
+.. parsed-literal::
+
+    State(n=2, l=1, S=0, J=1, MJ=0)
+
+.. code:: ipython3
+
+    # ket notation
     print(mat.basis[0])
 
 
 .. parsed-literal::
 
-    State(n=1, l=0, S=0, J=0, MJ=0)
+    ❘ 2 1 0 1 0 ⟩
 
-Here, `mat` is an instance of the `Hamiltonian` class, which has methods that include `stark_map()`
-and `zeeman_map()`. These can be used to calculate the energy eigenvalues using the initialised basis
-in a range of electric or magnetic fields.
+Here, `mat` is an instance of the `Hamiltonian` class. The `mat.basis` is a list of instances 
+of the attrs class `State`.  `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which can
+be used to calculate the energy eigenvalues in a range of electric or magnetic fields.
 
 The accuracy of the results depends on the suitability of the basis set.  See the notebooks for examples.
 
@@ -77,19 +87,20 @@ Version information
 -------------------
 
 ===================  =======================================
-Python               3.6.1 64bit [MSC v.1900 64 bit (AMD64)]
-IPython              5.3.0
-OS                   Windows 10 10.0.15063 SP0
-attr                 17.2.0
-matplotlib           2.0.2
-numba                0.33.0
-numpy                1.12.1
-scipy                0.19.0
-sympy                1.0
-tabulate             0.8.1
-tqdm                 4.15.0
+Python               3.6.3 64bit [MSC v.1900 64 bit (AMD64)]
+IPython              6.1.0
+OS                   Windows 10 10.0.16299 SP0
+attr                 17.3.0
+matplotlib           2.1.0
+numba                0.35.0+10.g143f70e
+numpy                1.13.3
+scipy                1.0.0
+sympy                1.1.1
+tabulate             0.8.2
+tqdm                 4.19.4
 version_information  1.0.3
 ===================  =======================================
+
 
 Examples
 --------
