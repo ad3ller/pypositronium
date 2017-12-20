@@ -58,7 +58,7 @@ Basic Usage
 
 .. code:: ipython3
 
-    mat.basis[0]
+    mat.basis[10]
 
 
 .. parsed-literal::
@@ -68,7 +68,7 @@ Basic Usage
 .. code:: ipython3
 
     # ket notation
-    print(mat.basis[0])
+    print(mat.basis[10])
 
 
 .. parsed-literal::
