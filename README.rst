@@ -75,7 +75,7 @@ Basic Usage
 
     ❘ 2 1 0 1 0 ⟩
 
-Here, `mat` is an instance of the `Hamiltonian` class. The `mat.basis` is a list of instances 
+Here, `mat` is an instance of the `Hamiltonian` class and `mat.basis` is a list of instances 
 of the attrs class `State`.  `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which can
 be used to calculate the energy eigenvalues in a range of electric or magnetic fields.
 
