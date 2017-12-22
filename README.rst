@@ -1,7 +1,7 @@
 ﻿Positronium
 ===========
 
-v0.0.1
+v0.0.2
 
 Calculate the energy levels of positronium in parallel electric and magnetic fields.
 
