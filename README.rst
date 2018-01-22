@@ -46,9 +46,9 @@ Basic Usage
 
 .. code:: ipython3
 
-    from psfs import Hamiltonian
-    mat = Hamiltonian(n_min=1, n_max=3, MJ_max=None)
-    print('number of basis states:', '%d'%mat.num_states)
+    >>> from psfs import Hamiltonian
+    >>> mat = Hamiltonian(n_min=1, n_max=3, MJ_max=None)
+    >>> print('number of basis states:', '%d'%mat.num_states)
 
 
 .. parsed-literal::
@@ -58,7 +58,7 @@ Basic Usage
 
 .. code:: ipython3
 
-    mat.basis[10]
+    >>> mat.basis[10]
 
 
 .. parsed-literal::
@@ -67,8 +67,8 @@ Basic Usage
 
 .. code:: ipython3
 
-    # ket notation
-    print(mat.basis[10])
+    >>> # ket notation
+    >>> print(mat.basis[10])
 
 
 .. parsed-literal::
