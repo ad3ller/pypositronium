@@ -31,15 +31,15 @@ Using `anaconda <https://anaconda.org/>`_, the main requirements can be installe
    conda install scipy sympy numba
 
 
-Then install psfs using setuptools (this will also install `attrs <http://www.attrs.org/>`_ and `tqdm <https://github.com/tqdm/tqdm>`_).
+Then install using setuptools (this will also install `attrs <http://www.attrs.org/>`_ and `tqdm <https://github.com/tqdm/tqdm>`_).
 
 .. code-block:: bash
 
-   git clone https://github.com/ad3ller/psfs
-   cd ./psfs
+   git clone https://github.com/ad3ller/positronium_fs
+   cd ./positronium_fs
    python setup.py install
 
-The package can now be imported into python.  
+The package can now be imported into python as *psfs*.
 
 Basic Usage
 -----------
@@ -58,6 +58,7 @@ Basic Usage
 
 .. code:: ipython3
 
+    >>> # e.g., the 10th element of the basis set
     >>> mat.basis[10]
 
 
@@ -76,8 +77,7 @@ Basic Usage
     ❘ 2 1 0 1 0 ⟩
 
 Here, `mat` is an instance of the `Hamiltonian` class and `mat.basis` is a list of instances 
-of the attrs class `State`.  `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which can
-be used to calculate the energy eigenvalues in a range of electric or magnetic fields.
+of the attrs class `State`.  `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues in a range of electric or magnetic fields.
 
 The accuracy of the results depends on the suitability of the basis set.  See the notebooks for examples.
 
