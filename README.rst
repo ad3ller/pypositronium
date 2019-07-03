@@ -1,7 +1,7 @@
 positronium fs
 ==============
 
-v0.0.2
+v0.0.3
 
 Calculate the energy levels of positronium in parallel electric and magnetic fields.
 
@@ -31,7 +31,7 @@ Using `anaconda <https://anaconda.org/>`_, the main requirements can be installe
    conda install scipy sympy numba
 
 
-Then install using setuptools (this will also install `attrs <http://www.attrs.org/>`_ and `tqdm <https://github.com/tqdm/tqdm>`_).
+Then install using setuptools (this will also install `tqdm <https://github.com/tqdm/tqdm>`_).
 
 .. code-block:: bash
 
@@ -46,9 +46,9 @@ Basic Usage
 
 .. code:: ipython3
 
-    >>> from psfs import Hamiltonian
-    >>> mat = Hamiltonian(n_min=1, n_max=3, MJ_max=None)
-    >>> print('number of basis states:', '%d'%mat.num_states)
+    >>> from psfs import Basis, Hamiltonian
+    >>> mat = Hamiltonian(Basis(n_values=range(1, 4)))
+    >>> print('number of basis states:', '%d'%mat.basis.num_states)
 
 
 .. parsed-literal::
@@ -64,7 +64,7 @@ Basic Usage
 
 .. parsed-literal::
 
-    State(n=2, l=1, S=0, J=1, MJ=0)
+    State(n=2, L=1, S=0, J=1, MJ=0)
 
 .. code:: ipython3
 
@@ -76,30 +76,30 @@ Basic Usage
 
     ❘ 2 1 0 1 0 ⟩
 
-Here, `mat` is an instance of the `Hamiltonian` class and `mat.basis` is a list of instances 
-of the attrs class `State`.  `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues in a range of electric or magnetic fields.
+An instance of the `Hamiltonian` class is initialised using a Basis, which is a UserList of instances of the dataclass `State`.
+`Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues in a range
+of electric or magnetic fields.
 
-The accuracy of the results depends on the suitability of the basis set.  See the notebooks for examples.
+See the notebooks for examples.
 
 Some of the notebooks require https://github.com/ad3ller/Stark-map-tools.
 
 Version information
 -------------------
 
-===================  =======================================
-Python               3.6.3 64bit [MSC v.1900 64 bit (AMD64)]
-IPython              6.1.0
-OS                   Windows 10 10.0.16299 SP0
-attr                 17.3.0
-matplotlib           2.1.0
-numba                0.35.0+10.g143f70e
-numpy                1.13.3
-scipy                1.0.0
-sympy                1.1.1
-tabulate             0.8.2
-tqdm                 4.19.4
+===================  ====================================================
+Python               3.7.3 64bit [GCC 7.3.0]
+IPython              7.4.0
+OS                   Linux 5.0.0 15 generic x86_64 with debian buster sid
+matplotlib           3.0.3
+numba                0.43.1
+numpy                1.16.2
+scipy                1.2.1
+sympy                1.3
+tabulate             0.8.3
+tqdm                 4.31.1
 version_information  1.0.3
-===================  =======================================
+===================  ====================================================
 
 
 Examples

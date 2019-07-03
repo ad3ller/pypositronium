@@ -1,22 +1,22 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Sep 26 13:08:34 2017
-
-@author: Adam
+""" Numerov solver
 """
 from math import ceil, log, exp
 import numpy as np
 from numba import jit
 
-@jit
-def wf(n, l, nmax, step=0.005, rmin=0.65):
-    """ Use the Numerov method to find the wavefunction for state n*, l, where
-        n* = n - delta.
 
-        nmax ensures that wavefunctions from different values of n can be aligned.
+@jit
+def wf(n, l, nmax=None, step=0.005, rmin=0.65):
+    """ Use the Numerov method to find the wavefunction for state n, l.
+
+    For atoms with a quatumn defect, use n* = n - qd
+
+    nmax ensures that wavefunctions from different values of n can be aligned.
     """
-    W1 = -0.5 * n**-2.0
-    W2 = (l + 0.5)**2.0
+    if nmax is None:
+        nmax = n
+    w1 = -0.5 * n**-2.0
+    w2 = (l + 0.5)**2.0
     rmax = 2 * nmax * (nmax + 15)
     r_in = n**2.0 - n * (n**2.0 - l*(l + 1.0))**0.5
     step_sq = step**2.0
@@ -32,8 +32,8 @@ def wf(n, l, nmax, step=0.005, rmin=0.65):
     # initialise
     r_sub1 = rmax * exp(-i*step)
     rvals = [r_sub2, r_sub1]
-    g_sub2 = 2.0 * r_sub2**2.0 * (-1.0 / r_sub2 - W1) + W2
-    g_sub1 = 2.0 * r_sub1**2.0 * (-1.0 / r_sub1 - W1) + W2
+    g_sub2 = 2.0 * r_sub2**2.0 * (-1.0 / r_sub2 - w1) + w2
+    g_sub1 = 2.0 * r_sub1**2.0 * (-1.0 / r_sub1 - w1) + w2
     y_sub2 = 1e-10
     y_sub1 = y_sub2 * (1.0 + step * g_sub2**0.5)
     yvals = [y_sub2, y_sub1]
@@ -42,24 +42,24 @@ def wf(n, l, nmax, step=0.005, rmin=0.65):
     i += 1
     r = r_sub1
     while r >= rmin:
-        ## next step
+        # next step
         r = rmax * exp(-i*step)
-        g = 2.0 * r**2.0 * (-1.0 / r - W1) + W2
-        y = (y_sub2 * (g_sub2 - (12.0 / step_sq)) + y_sub1 * \
-            (10.0 * g_sub1 + (24.0 / step_sq))) / ((12.0 / step_sq) - g)
-
-        ## check for divergence
+        g = 2.0 * r**2.0 * (-1.0 / r - w1) + w2
+        y = ((y_sub2 * (g_sub2 - (12.0 / step_sq))
+             + y_sub1 * (10.0 * g_sub1 + (24.0 / step_sq)))
+             / ((12.0 / step_sq) - g))
+        # check for divergence
         if r < r_in:
             dy = abs((y - y_sub1) / y_sub1)
             dr = (r**(-l-1) - r_sub1**(-l-1)) / r_sub1**(-l-1)
             if dy > dr:
                 break
 
-        ## store vals
+        # store vals
         rvals.append(r)
         yvals.append(y)
 
-        ## next iteration
+        # next iteration
         r_sub1 = r
         g_sub2 = g_sub1
         g_sub1 = g
@@ -73,6 +73,7 @@ def wf(n, l, nmax, step=0.005, rmin=0.65):
     yvals = yvals * (np.sum((yvals**2.0) * (rvals**2.0)))**-0.5
     return rvals, yvals
 
+
 @jit
 def find_first(arr, val):
     """ Index of the first occurence of val in arr.
@@ -84,6 +85,7 @@ def find_first(arr, val):
         i += 1
     raise Exception('val not found in arr')
 
+
 @jit
 def find_last(arr, val):
     """ Index of the last occurence of val in arr.
@@ -94,6 +96,7 @@ def find_last(arr, val):
             return i
         i -= 1
     raise Exception('val not found in arr')
+
 
 @jit
 def wf_align(r1, y1, r2, y2):
@@ -125,12 +128,14 @@ def wf_align(r1, y1, r2, y2):
     else:
         raise Exception("Failed to align wavefunctions.")
 
+
 @jit
 def wf_overlap(r1, y1, r2, y2, p=1.0):
     """ Find the overlap between two radial wavefunctions (r, y).
     """
     r1, y1, r2, y2 = wf_align(r1, y1, r2, y2)
     return np.sum(y1 * y2 * r1**(2.0 + p))
+
 
 @jit(cache=True)
 def rad_overlap(n1, l1, n2, l2, p=1.0):
