@@ -47,8 +47,8 @@ Basic Usage
 .. code:: ipython3
 
     >>> from psfs import Basis, Hamiltonian
-    >>> mat = Hamiltonian(Basis(n_values=range(1, 4)))
-    >>> print('number of basis states:', '%d'%mat.basis.num_states)
+    >>> basis = Basis(n_values=range(1, 4))
+    >>> print(f'number of basis states: {basis.num_states}')
 
 
 .. parsed-literal::
@@ -59,7 +59,7 @@ Basic Usage
 .. code:: ipython3
 
     >>> # e.g., the 10th element of the basis set
-    >>> mat.basis[10]
+    >>> basis[10]
 
 
 .. parsed-literal::
@@ -69,12 +69,17 @@ Basic Usage
 .. code:: ipython3
 
     >>> # ket notation
-    >>> print(mat.basis[10])
+    >>> print(basis[10])
 
 
 .. parsed-literal::
 
     ❘ 2 1 0 1 0 ⟩
+
+.. code:: ipython3
+
+    >>> # initialize
+    >>> mat = Hamiltonian(basis)
 
 An instance of the `Hamiltonian` class is initialised using a Basis, which is a UserList of instances of the dataclass `State`.
 `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues in a range
