@@ -119,9 +119,11 @@ class Hamiltonian(object):
                 electric field [atomic units]
             Bz :: float
                 magnetic field [atomic units]
+            units :: str
+                output units, e.g., "SI" (default: "atomic units")
 
         return:
-            eigenvalues
+            eigenvalues, eigenvectors
         """
         return np.linalg.eigh(self.matrix(Fz, Bz, **kwargs))
 
@@ -134,9 +136,11 @@ class Hamiltonian(object):
                 electric field [atomic units]
             Bz :: float
                 magnetic field [atomic units]
+            units :: str
+                output units, e.g., "SI" (default: "atomic units")
 
         return:
-            eigenvalues, eigenvectors
+            eigenvalues
         """
         return np.linalg.eigvalsh(self.matrix(Fz, Bz, **kwargs))
 
@@ -150,6 +154,8 @@ class Hamiltonian(object):
                 electric field [atomic units]
             Bz :: float
                 magnetic field [atomic units]
+            units :: str
+                output units, e.g., "SI" (default: "atomic units")
 
         return:
             eigenvalues, amplitudes
@@ -172,7 +178,7 @@ class Hamiltonian(object):
                     :: Boolean
                             if True return eigenvectors
 
-                    :: Iterable
+                    :: list or np.ndarray
                             return the sum of the square of the specified
                             elements of the eigenvectors (amplitudes).
 
@@ -242,7 +248,7 @@ class Hamiltonian(object):
                     :: Boolean
                             if True return eigenvectors
 
-                    :: Iterable
+                    :: list or np.ndarray
                             return the sum of the square of the specified
                             elements of the eigenvectors (amplitudes).
 
