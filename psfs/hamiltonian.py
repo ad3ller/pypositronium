@@ -119,20 +119,11 @@ class Hamiltonian(object):
         """ eigenvalues and eigenvectors of the total Hamiltonian.
 
         args:
-<<<<<<< HEAD
             electric_field      :: float     [V / m]
             magnetic_field      :: float     [T]
 
         kwargs:
             units="atomic_units"
-=======
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
-            units :: str
-                output units, e.g., "SI" (default: "atomic units")
->>>>>>> f3795e4deac312c97efa19cc9ed9dcca68ca8212
 
         return:
             eigenvalues, eigenvectors
@@ -144,20 +135,11 @@ class Hamiltonian(object):
         """ eigenvalues of the total Hamiltonian.
 
         args:
-<<<<<<< HEAD
             electric_field      :: float     [V / m]
             magnetic_field      :: float     [T]
 
         kwargs:
             units="atomic_units"
-=======
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
-            units :: str
-                output units, e.g., "SI" (default: "atomic units")
->>>>>>> f3795e4deac312c97efa19cc9ed9dcca68ca8212
 
         return:
             eigenvalues
@@ -170,21 +152,12 @@ class Hamiltonian(object):
         Hamiltonian.
 
         args:
-<<<<<<< HEAD
             elements            :: Iterable
             electric_field      :: float     [V / m]
             magnetic_field      :: float     [T]
 
         kwargs:
             units="atomic_units"
-=======
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
-            units :: str
-                output units, e.g., "SI" (default: "atomic units")
->>>>>>> f3795e4deac312c97efa19cc9ed9dcca68ca8212
 
         return:
             eigenvalues, amplitudes
