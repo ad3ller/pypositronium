@@ -69,7 +69,6 @@ def atomic_units(dimension):
 
     >>> func(units='eV')
     27.211386470176983
-
     """
     data = conversion_data[dimension]
 

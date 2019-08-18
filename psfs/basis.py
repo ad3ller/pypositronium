@@ -40,7 +40,8 @@ class State:
             assert self.J == self.S
         else:
             assert self.L - self.S <= self.J <= self.L + self.S
-        assert isinstance(self.MJ, int) and -self.J <= self.MJ <= self.J
+        assert isinstance(self.MJ, int)
+        assert -self.J <= self.MJ <= self.J
 
     def energy(self, **kwargs):
         """ state energy """
@@ -81,16 +82,17 @@ class Basis(UserList):
         num_states :: int
 
     methods:
+        attrib
+            attribute values of the basis
         where
-            generate a subset of the basis
+            a subset of the basis
         argwhere
-            generate indexes of a subset of the basis
-
+            indexes of a subset of the basis
     """
     def __init__(self, n_values, L_values=None, S_values=None, MJ_values=None,
                  filter_function=None, sort_key=energy):
         """ Initialise collections.UserList """
-        basis = generate(n_values, L_values, S_values, MJ_values)
+        basis = generate_basis(n_values, L_values, S_values, MJ_values)
         if filter_function is not None:
             basis = filter(filter_function, basis)
         if sort_key is not None:
@@ -102,8 +104,19 @@ class Basis(UserList):
         """ size of the basis set """
         return len(self.data)
 
+    def attrib(self, attribute):
+        """ Attribute values for all elements in the basis.
+        
+        args:
+            attribute :: str           e.g., n or J.
+        
+        return:
+            generator
+        """
+        return (getattr(el, attribute) for el in self.data)
+
     def where(self, function):
-        """ States where function mapped to basis evaluates as True.
+        """ Elements where function mapped to basis evaluates as True.
 
         args:
             function :: function
@@ -125,7 +138,7 @@ class Basis(UserList):
         return argwhere(function, self)
 
 
-def generate(n_values, L_values=None, S_values=None, MJ_values=None):
+def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):
     """ generate instances of State
 
     args:

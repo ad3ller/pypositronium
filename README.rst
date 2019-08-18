@@ -24,14 +24,16 @@ Radial wavefunctions are obtained using the Numerov method, as described by:
 Install
 -------
 
-Using `anaconda <https://anaconda.org/>`_, the main requirements can be installed with conda:
+The main requirements can be installed with `conda <https://anaconda.org/>`_:
 
 .. code-block:: bash
 
-   conda install scipy sympy numba
+   conda install numpy scipy sympy tqdm
 
 
-Then install using setuptools (this will also install `tqdm <https://github.com/tqdm/tqdm>`_).
+Next, build and install `numerov <https://github.com/ad3ller/numerov>`_.
+
+And finally, clone the souce code and then install the package using setuptools.
 
 .. code-block:: bash
 
@@ -39,7 +41,6 @@ Then install using setuptools (this will also install `tqdm <https://github.com/
    cd ./positronium_fs
    python setup.py install
 
-The package can now be imported into python as *psfs*.
 
 Basic Usage
 -----------
@@ -82,6 +83,18 @@ Basic Usage
     >>> mat = Hamiltonian(basis)
 
 An instance of the `Hamiltonian` class is initialised using a Basis, which is a UserList of instances of the dataclass `State`.
+
+.. code:: ipython3
+
+    >>> electric_field = 10.1   # [V / m]
+    >>> magnetic_field = 0.1    # [T]
+    >>> en = mat.eigvals(electric_field, magnetic_field, units="eV")
+    >>> print(en[:3])
+
+.. parsed-literal::
+
+    [-6.80332213 -6.8024767  -6.8024767  -6.80247654 -1.70078788]
+
 `Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues in a range
 of electric or magnetic fields.
 
@@ -92,25 +105,23 @@ Some of the notebooks require https://github.com/ad3ller/Stark-map-tools.
 Version information
 -------------------
 
-===================  ====================================================
-Python               3.7.3 64bit [GCC 7.3.0]
-IPython              7.4.0
-OS                   Linux 5.0.0 15 generic x86_64 with debian buster sid
-matplotlib           3.0.3
-numba                0.43.1
-numpy                1.16.2
-scipy                1.2.1
-sympy                1.3
-tabulate             0.8.3
-tqdm                 4.31.1
-version_information  1.0.3
-===================  ====================================================
+==========  ====================================================
+Python      3.7.3 64bit [GCC 7.3.0]
+IPython     7.6.1
+OS          Linux 5.0.0 23 generic x86_64 with debian buster sid
+cython      0.29.12
+matplotlib  3.1.0
+numerov     0.0.4
+numpy       1.16.4
+sympy       1.4
+tqdm        4.32.1
+==========  ====================================================
 
 
 Examples
 --------
 
-This code has not been tested extensively.  But several published calculations have been successfully reproduced.
+This code has *not* been tested extensively.  But several published calculations have been successfully reproduced.
 
 ----
 

@@ -20,14 +20,14 @@ class Hamiltonian(object):
         self._zeeman_matrix = None
 
     def e0(self, update=False):
-        """ field-free energy
+        """ field-free energy [atomic units].
         """
         if self._e0 is None or update:
             self._e0 = np.array([energy(x) for x in self.basis])
         return self._e0
 
     def h0_matrix(self, update=False):
-        """ field-free Hamiltonian matrix.
+        """ field-free Hamiltonian matrix [atomic units].
         """
         return np.diag(self.e0(update=update))
 
@@ -46,8 +46,8 @@ class Hamiltonian(object):
         return:
             np.ndarray()
         """
-        tqdm_kw = kwargs.get("tqdm_kw", {})
         if self._stark_matrix is None or update:
+            tqdm_kw = kwargs.get("tqdm_kw", {})
             self._stark_matrix = np.zeros([self.basis.num_states,
                                            self.basis.num_states])
             for i in trange(self.basis.num_states,
@@ -76,8 +76,8 @@ class Hamiltonian(object):
         return:
             np.ndarray()
         """
-        tqdm_kw = kwargs.get("tqdm_kw", {})
         if self._zeeman_matrix is None or update:
+            tqdm_kw = kwargs.get("tqdm_kw", {})
             self._zeeman_matrix = np.zeros([self.basis.num_states,
                                             self.basis.num_states])
             for i in trange(self.basis.num_states,
@@ -91,92 +91,101 @@ class Hamiltonian(object):
                         self._zeeman_matrix[j][i] = self._zeeman_matrix[i][j]
         return Bz * self._zeeman_matrix
 
-    def matrix(self, Fz=None, Bz=None, **kwargs):
+    @atomic_units("energy")
+    def matrix(self, electric_field=None, magnetic_field=None, units=None, **kwargs):
         """ total Hamiltonian matrix.
 
         args:
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
+            electric_field      :: float     [V / m]
+            magnetic_field      :: float     [T]
+
+        kwargs:
+            units="atomic_units"
 
         return:
             np.ndarray()
         """
         mat = self.h0_matrix(**kwargs)
-        if Fz is not None:
+        if electric_field is not None:
+            Fz = electric_field * e * a0 / En_h
             mat += self.stark_matrix(Fz, **kwargs)
-        if Bz is not None:
-            mat += self.zeeman_matrix(Bz, **kwargs)
+        if magnetic_field is not None:
+            Bz = magnetic_field * mu_B / En_h
+            mat += self.zeeman_matrix(Bz, **kwargs)           
         return mat
 
     @atomic_units("energy")
-    def eig(self, Fz=None, Bz=None, units=None, **kwargs):
+    def eig(self, electric_field=None, magnetic_field=None, units=None, **kwargs):
         """ eigenvalues and eigenvectors of the total Hamiltonian.
 
         args:
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
+            electric_field      :: float     [V / m]
+            magnetic_field      :: float     [T]
+
+        kwargs:
+            units="atomic_units"
 
         return:
             eigenvalues
         """
-        return np.linalg.eigh(self.matrix(Fz, Bz, **kwargs))
+        return np.linalg.eigh(self.matrix(electric_field, magnetic_field, **kwargs))
 
     @atomic_units("energy")
-    def eigvals(self, Fz=None, Bz=None, units=None, **kwargs):
+    def eigvals(self, electric_field=None, magnetic_field=None, units=None, **kwargs):
         """ eigenvalues of the total Hamiltonian.
 
         args:
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
+            electric_field      :: float     [V / m]
+            magnetic_field      :: float     [T]
+
+        kwargs:
+            units="atomic_units"
 
         return:
             eigenvalues, eigenvectors
         """
-        return np.linalg.eigvalsh(self.matrix(Fz, Bz, **kwargs))
+        return np.linalg.eigvalsh(self.matrix(electric_field, magnetic_field, **kwargs))
 
     @atomic_units("energy")
-    def eigamp(self, elements, Fz=None, Bz=None, units=None, **kwargs):
+    def eigamp(self, elements, electric_field=None, magnetic_field=None, units=None, **kwargs):
         """ eigenvalues and sum(eigenvector[elements]^2) of the total
         Hamiltonian.
 
         args:
-            Fz :: float
-                electric field [atomic units]
-            Bz :: float
-                magnetic field [atomic units]
+            elements            :: Iterable
+            electric_field      :: float     [V / m]
+            magnetic_field      :: float     [T]
+
+        kwargs:
+            units="atomic_units"
 
         return:
             eigenvalues, amplitudes
         """
-        vals, vec = np.linalg.eigh(self.matrix(Fz, Bz, **kwargs))
+        vals, vec = np.linalg.eigh(self.matrix(electric_field, magnetic_field, **kwargs))
         amp = np.sum(vec[elements]**2.0, axis=0)
         return vals, amp
 
     @atomic_units("energy")
     def stark_map(self, electric_field,
-                  magnetic_field=None, elements=False, **kwargs):
+                  magnetic_field=None, elements=False, units=None, **kwargs):
         """ The eigenvalues of the Hamiltonian for a range of electric fields.
 
         If units is not specified, eigenvalues are returned in atomic units.
 
         args:
-            electric_field          :: Iterable      units: V / m
-            magnetic_field=None     :: Number        units: T
+            electric_field          :: Iterable      [V / m]
+            magnetic_field=None     :: Number        [T]
             elements=False
                     :: Boolean
                             if True return eigenvectors
 
                     :: Iterable
                             return the sum of the square of the specified
-                            elements of the eigenvectors (amplitudes).
+                            elements of the eigenvectors.
 
         kwargs:
+            update=False
             units="atomic_units"
             tqdm_kw :: dict
 
@@ -186,6 +195,7 @@ class Hamiltonian(object):
         Nb. A large map with eignvectors can take up a LOT of memory.
         """
         tqdm_kw = kwargs.get("tqdm_kw", {})
+        update = kwargs.get("update", False)
         # initialise output arrays
         num_fields = len(electric_field)
         values = np.empty((num_fields,
@@ -204,7 +214,8 @@ class Hamiltonian(object):
             Bz = magnetic_field * mu_B / En_h
             base_matrix += self.zeeman_matrix(Bz=Bz, **kwargs)
         # update stark matrix
-        self.stark_matrix(**kwargs)
+        if update or self._stark_matrix is None:
+            self.stark_matrix(**kwargs)
         # loop over electric field values
         for i in trange(num_fields,
                         desc="diagonalise matrix", **tqdm_kw):
@@ -230,23 +241,24 @@ class Hamiltonian(object):
 
     @atomic_units("energy")
     def zeeman_map(self, magnetic_field,
-                   electric_field=None, elements=False, **kwargs):
+                   electric_field=None, elements=False, units=None, **kwargs):
         """ The eigenvalues of the Hamiltonian for a range of magnetic fields.
 
         If units is not specified, eigenvalues are returned in atomic units.
 
         args:
-            magnetic_field          :: Iterable      units: T
-            electric_field=None     :: Number        units: V / m
+            magnetic_field          :: Iterable      [T]
+            electric_field=None     :: Number        [V / m]
             elements=False
                     :: Boolean
                             if True return eigenvectors
 
                     :: Iterable
                             return the sum of the square of the specified
-                            elements of the eigenvectors (amplitudes).
+                            elements of the eigenvectors.
 
         kwargs:
+            update=False
             units="atomic_units"
             tqdm_kw :: dict
 
@@ -256,6 +268,7 @@ class Hamiltonian(object):
         Nb. A large map with eignvectors can take up a LOT of memory.
         """
         tqdm_kw = kwargs.get("tqdm_kw", {})
+        update = kwargs.get("update", False)
         # initialise output arrays
         num_fields = len(magnetic_field)
         values = np.empty((num_fields,
@@ -274,7 +287,8 @@ class Hamiltonian(object):
             Fz = electric_field * e * a0 / En_h
             base_matrix += self.stark_matrix(Fz=Fz, **kwargs)
         # update zeeman matrix
-        self.zeeman_matrix(**kwargs)
+        if update or self._zeeman_matrix is None:
+            self.zeeman_matrix(**kwargs)
         # loop over electric field values
         for i in trange(num_fields,
                         desc="diagonalise matrix", **tqdm_kw):
