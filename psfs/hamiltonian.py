@@ -119,14 +119,23 @@ class Hamiltonian(object):
         """ eigenvalues and eigenvectors of the total Hamiltonian.
 
         args:
+<<<<<<< HEAD
             electric_field      :: float     [V / m]
             magnetic_field      :: float     [T]
 
         kwargs:
             units="atomic_units"
+=======
+            Fz :: float
+                electric field [atomic units]
+            Bz :: float
+                magnetic field [atomic units]
+            units :: str
+                output units, e.g., "SI" (default: "atomic units")
+>>>>>>> f3795e4deac312c97efa19cc9ed9dcca68ca8212
 
         return:
-            eigenvalues
+            eigenvalues, eigenvectors
         """
         return np.linalg.eigh(self.matrix(electric_field, magnetic_field, **kwargs))
 
@@ -135,14 +144,23 @@ class Hamiltonian(object):
         """ eigenvalues of the total Hamiltonian.
 
         args:
+<<<<<<< HEAD
             electric_field      :: float     [V / m]
             magnetic_field      :: float     [T]
 
         kwargs:
             units="atomic_units"
+=======
+            Fz :: float
+                electric field [atomic units]
+            Bz :: float
+                magnetic field [atomic units]
+            units :: str
+                output units, e.g., "SI" (default: "atomic units")
+>>>>>>> f3795e4deac312c97efa19cc9ed9dcca68ca8212
 
         return:
-            eigenvalues, eigenvectors
+            eigenvalues
         """
         return np.linalg.eigvalsh(self.matrix(electric_field, magnetic_field, **kwargs))
 
@@ -152,12 +170,21 @@ class Hamiltonian(object):
         Hamiltonian.
 
         args:
+<<<<<<< HEAD
             elements            :: Iterable
             electric_field      :: float     [V / m]
             magnetic_field      :: float     [T]
 
         kwargs:
             units="atomic_units"
+=======
+            Fz :: float
+                electric field [atomic units]
+            Bz :: float
+                magnetic field [atomic units]
+            units :: str
+                output units, e.g., "SI" (default: "atomic units")
+>>>>>>> f3795e4deac312c97efa19cc9ed9dcca68ca8212
 
         return:
             eigenvalues, amplitudes
@@ -180,7 +207,7 @@ class Hamiltonian(object):
                     :: Boolean
                             if True return eigenvectors
 
-                    :: Iterable
+                    :: list or np.ndarray
                             return the sum of the square of the specified
                             elements of the eigenvectors.
 
@@ -253,7 +280,7 @@ class Hamiltonian(object):
                     :: Boolean
                             if True return eigenvectors
 
-                    :: Iterable
+                    :: list or np.ndarray
                             return the sum of the square of the specified
                             elements of the eigenvectors.
 
