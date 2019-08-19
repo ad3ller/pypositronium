@@ -89,13 +89,13 @@ An instance of the `Hamiltonian` class is initialised using a Basis, which is a 
     >>> electric_field = 10.1   # [V / m]
     >>> magnetic_field = 0.1    # [T]
     >>> en = mat.eigvals(electric_field, magnetic_field, units="eV")
-    >>> print(en[:3])
+    >>> print(en[:5])
 
 .. parsed-literal::
 
     [-6.80332213 -6.8024767  -6.8024767  -6.80247654 -1.70078788]
 
-`Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues in a range
+`Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues for a range
 of electric or magnetic fields.
 
 See the notebooks for examples.
