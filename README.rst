@@ -45,6 +45,8 @@ And finally, clone the souce code and then install the package using setuptools.
 Basic Usage
 -----------
 
+`Basis` is a list of instances of the dataclass `State`.
+
 .. code:: ipython3
 
     >>> from psfs import Basis, Hamiltonian
@@ -77,12 +79,14 @@ Basic Usage
 
     ❘ 2 1 0 1 0 ⟩
 
+The `Hamiltonian` class is initialised using a basis.  
+
 .. code:: ipython3
 
     >>> # initialize
     >>> mat = Hamiltonian(basis)
 
-An instance of the `Hamiltonian` class is initialised using a Basis, which is a UserList of instances of the dataclass `State`.
+The method `eigvals()` returns the eigenvalues.
 
 .. code:: ipython3
 
@@ -95,8 +99,7 @@ An instance of the `Hamiltonian` class is initialised using a Basis, which is a 
 
     [-6.80332213 -6.8024767  -6.8024767  -6.80247654 -1.70078788]
 
-`Hamiltonian` has methods `stark_map()` and `zeeman_map()`, which use the basis set to calculate energy eigenvalues for a range
-of electric or magnetic fields.
+The methods `stark_map()` and `zeeman_map()` calculate the eigenvalues for a range of electric or magnetic fields.
 
 See the notebooks for examples.
 
