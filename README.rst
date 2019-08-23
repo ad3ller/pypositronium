@@ -1,8 +1,6 @@
 positronium fs
 ==============
 
-v0.0.3
-
 Calculate the energy levels of positronium in parallel electric and magnetic fields.
 
 Fine structure is included to first order using the formula given on page 117 of:
