@@ -1,5 +1,5 @@
-positronium fs
-==============
+positronium
+===========
 
 Calculate the energy levels of positronium in parallel electric and magnetic fields.
 
