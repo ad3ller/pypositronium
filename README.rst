@@ -35,7 +35,7 @@ And finally, clone the souce code and then install the package using setuptools.
 
 .. code-block:: bash
 
-   git clone https://github.com/ad3ller/positronium_fs
+   git clone https://github.com/ad3ller/pypositronium
    cd ./positronium_fs
    python setup.py install
 
