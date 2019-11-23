@@ -220,17 +220,15 @@ class Hamiltonian(object):
         for i in trange(num_fields,
                         desc="diagonalise matrix", **tqdm_kw):
             Fz = electric_field[i] * e * a0 / En_h
+            mat = base_matrix + self.stark_matrix(Fz=Fz)
             # diagonalise
             if isinstance(elements, Iterable):
-                values[i], vec = np.linalg.eigh(base_matrix
-                                                + self.stark_matrix(Fz=Fz))
+                values[i], vec = np.linalg.eigh(mat)
                 amplitudes[i] = np.sum(vec[elements]**2.0, axis=0)
             elif elements:
-                values[i], vectors[i] = np.linalg.eigh(base_matrix
-                                                       + self.stark_matrix(Fz=Fz))
+                values[i], vectors[i] = np.linalg.eigh(mat)
             else:
-                values[i] = np.linalg.eigvalsh(base_matrix
-                                               + self.stark_matrix(Fz=Fz))
+                values[i] = np.linalg.eigvalsh(mat)
         # output
         if isinstance(elements, Iterable):
             return values, amplitudes
@@ -293,17 +291,15 @@ class Hamiltonian(object):
         for i in trange(num_fields,
                         desc="diagonalise matrix", **tqdm_kw):
             Bz = magnetic_field[i] * mu_B / En_h
+            mat = base_matrix + self.zeeman_matrix(Bz=Bz)
             # diagonalise
             if isinstance(elements, Iterable):
-                values[i], vec = np.linalg.eigh(base_matrix
-                                                + self.zeeman_matrix(Bz=Bz))
+                values[i], vec = np.linalg.eigh(mat)
                 amplitudes[i] = np.sum(vec[elements]**2.0, axis=0)
             elif elements:
-                values[i], vectors[i] = np.linalg.eigh(base_matrix
-                                                       + self.zeeman_matrix(Bz=Bz))
+                values[i], vectors[i] = np.linalg.eigh(mat)
             else:
-                values[i] = np.linalg.eigvalsh(base_matrix
-                                               + self.zeeman_matrix(Bz=Bz))
+                values[i] = np.linalg.eigvalsh(mat)
         # output
         if isinstance(elements, Iterable):
             return values, amplitudes

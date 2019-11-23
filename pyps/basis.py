@@ -3,7 +3,6 @@
 from collections import UserList
 from dataclasses import dataclass
 from .energy import energy
-from .tools import where, argwhere
 
 
 @dataclass
@@ -124,7 +123,7 @@ class Basis(UserList):
         return:
             generator
         """
-        return where(function, self)
+        return (x for x in self if function(x))
 
     def argwhere(self, function):
         """ Indexes where function mapped to basis evaluates as True.
@@ -135,7 +134,7 @@ class Basis(UserList):
         return:
             generator
         """
-        return argwhere(function, self)
+        return (i for i, x in enumerate(self) if function(x))
 
 
 def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):

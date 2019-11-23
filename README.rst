@@ -29,7 +29,7 @@ The main requirements can be installed with `conda <https://anaconda.org/>`_:
    conda install numpy scipy sympy tqdm
 
 
-Next, build and install `numerov <https://github.com/ad3ller/numerov>`_.
+Optional: build and install `numerov <https://github.com/ad3ller/numerov>`_.
 
 And finally, clone the souce code and then install the package using setuptools.
 
@@ -47,7 +47,7 @@ Basic Usage
 
 .. code:: ipython3
 
-    >>> from psfs import Basis, Hamiltonian
+    >>> from pyps import Basis, Hamiltonian
     >>> basis = Basis(n_values=range(1, 4))
     >>> print(f'number of basis states: {basis.num_states}')
 

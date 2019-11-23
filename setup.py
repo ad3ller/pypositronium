@@ -1,13 +1,13 @@
 from setuptools import setup
 
-setup(name='psfs',
-      version='0.0.5',
+setup(name='pyps',
+      version='0.0.6',
       description='Calculate the Stark effect in positronium',
       url='',
       author='Adam Deller',
       author_email='a.deller@ucl.ac.uk',
       license='BSD 3-clause',
-      packages=['psfs'],
+      packages=['pyps'],
       install_requires=[
           'numpy>=1.15', 'sympy>=1.3', 'tqdm>=4.15.0'
       ],
