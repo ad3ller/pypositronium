@@ -31,7 +31,7 @@ The main requirements can be installed with `conda <https://anaconda.org/>`_:
    conda install numpy scipy sympy tqdm
 
 
-**Optional (speed up high-n calculations)**
+Optional (speed up high-n calculations): 
 Build and install `numerov <https://github.com/ad3ller/numerov>`_.
 
 And finally, clone the souce code and then install the package
@@ -104,9 +104,7 @@ The method `eigvals()` returns the eigenvalues.
 The methods `stark_map()` and `zeeman_map()` calculate the
 eigenvalues for a range of electric or magnetic fields.
 
-See the notebooks for examples.
-
-Some of the notebooks require https://github.com/ad3ller/Stark-map-tools.
+See the notebooks for examples (some of which require https://github.com/ad3ller/Stark-map-tools.)
 
 Version information
 -------------------
@@ -127,8 +125,8 @@ tqdm        4.39.0
 Examples
 --------
 
-This code has *not* been tested extensively.  But several published
- calculations have been reproduced.
+
+This code has not  been tested extensively, although several published calculations have been reproduced.
 
 ----
 
