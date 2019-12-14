@@ -1,17 +1,19 @@
 pypositronium
 =============
 
-Calculate the energy levels of positronium in parallel electric and magnetic fields.
+Calculate the energy levels of positronium in parallel electric
+and magnetic fields.
 
-Fine structure is included to first order using the formula given on page 117 of:
+Fine structure is included to first order using the formula
+given on page 117 of:
 
-  | Quantum Mechanics of One- And Two-Electron Atoms  
-  | by Hans a. Bethe and Edwin E. Salpeter  
+  | Quantum Mechanics of One- And Two-Electron Atoms
+  | by Hans a. Bethe and Edwin E. Salpeter
   | ISBN 978-1-61427-622-7
 
 The Stark and Zeeman matrices are constructed using the equations given in:
 
-  | A. M. Alonso et al., Phys. Rev. A, 93, 012506 (2016) 
+  | A. M. Alonso et al., Phys. Rev. A, 93, 012506 (2016)
   | https://dx.doi.org/10.1103/PhysRevA.93.012506
 
 Radial wavefunctions are obtained using the Numerov method, as described by:
@@ -29,9 +31,11 @@ The main requirements can be installed with `conda <https://anaconda.org/>`_:
    conda install numpy scipy sympy tqdm
 
 
-Optional: build and install `numerov <https://github.com/ad3ller/numerov>`_.
+**Optional (speed up high-n calculations)**
+Build and install `numerov <https://github.com/ad3ller/numerov>`_.
 
-And finally, clone the souce code and then install the package using setuptools.
+And finally, clone the souce code and then install the package
+using setuptools.
 
 .. code-block:: bash
 
@@ -55,7 +59,7 @@ Basic Usage
 .. parsed-literal::
 
     number of basis states: 56
-    
+
 
 .. code:: ipython3
 
@@ -77,7 +81,7 @@ Basic Usage
 
     ❘ 2 1 0 1 0 ⟩
 
-The `Hamiltonian` class is initialised using a basis.  
+The `Hamiltonian` class is initialised using a basis.
 
 .. code:: ipython3
 
@@ -97,7 +101,8 @@ The method `eigvals()` returns the eigenvalues.
 
     [-6.80332213 -6.8024767  -6.8024767  -6.80247654 -1.70078788]
 
-The methods `stark_map()` and `zeeman_map()` calculate the eigenvalues for a range of electric or magnetic fields.
+The methods `stark_map()` and `zeeman_map()` calculate the
+eigenvalues for a range of electric or magnetic fields.
 
 See the notebooks for examples.
 
@@ -108,21 +113,22 @@ Version information
 
 ==========  ====================================================
 Python      3.7.3 64bit [GCC 7.3.0]
-IPython     7.6.1
-OS          Linux 5.0.0 23 generic x86_64 with debian buster sid
+IPython     7.9.0
+OS          Linux 5.0.0 27 generic x86_64 with debian buster sid
 cython      0.29.12
 matplotlib  3.1.0
-numerov     0.0.4
+numerov     0.0.5
 numpy       1.16.4
 sympy       1.4
-tqdm        4.32.1
+tqdm        4.39.0
 ==========  ====================================================
 
 
 Examples
 --------
 
-This code has *not* been tested extensively.  But several published calculations have been successfully reproduced.
+This code has *not* been tested extensively.  But several published
+ calculations have been reproduced.
 
 ----
 
@@ -130,21 +136,21 @@ S\. M. Curry, *Phys. Rev. A*, **7** (2), 447 (1973) https://dx.doi.org/10.1103/P
 
 .. figure:: ./images/zeeman_n2.png
    :width: 250px
-   
+
    **Fig. 2** Pure Zeeman effect in the first excited states of positronium.
 
 ----
 
 A\. M. Alonso *et al.*, *Phys. Rev. A*, **93**, 012506 (2016) https://dx.doi.org/10.1103/PhysRevA.93.012506
- 
+
 .. figure:: ./images/stark_n2.png
    :width: 450px
-   
+
    **Fig. 6 a) & b)** Dependence of the relative energies of all n=2 eigenstates in Ps on electric-field strength (a) in the absence of a magnetic field and (b) in a parallel magnetic field of B=130 G.
-   
+
 .. figure:: ./images/stark_n2_zoom.png
    :width: 450px
-   
+
    **Fig. 6 c)** An expanded view of the avoided crossing.
 
 ----

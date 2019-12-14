@@ -41,13 +41,15 @@ class Hamiltonian(object):
                 [re-]calculate and update cache
 
         kwrargs:
-            tqdm_kw :: dict
+            tqdm_kw={}    :: dict
+            numerov=False :: bool
 
         return:
             np.ndarray()
         """
         if self._stark_matrix is None or update:
             tqdm_kw = kwargs.get("tqdm_kw", {})
+            numerov = kwargs.get("numerov", False)
             self._stark_matrix = np.zeros([self.basis.num_states,
                                            self.basis.num_states])
             for i in trange(self.basis.num_states,
@@ -56,7 +58,8 @@ class Hamiltonian(object):
                 for j in range(i + 1, self.basis.num_states):
                     state_1, state_2 = self.basis[i], self.basis[j]
                     self._stark_matrix[i][j] = stark_interaction(state_1,
-                                                                 state_2)
+                                                                 state_2,
+                                                                 numerov=numerov)
                     # assume matrix is symmetric
                     self._stark_matrix[j][i] = self._stark_matrix[i][j]
         return Fz * self._stark_matrix
@@ -111,7 +114,7 @@ class Hamiltonian(object):
             mat += self.stark_matrix(Fz, **kwargs)
         if magnetic_field is not None:
             Bz = magnetic_field * mu_B / En_h
-            mat += self.zeeman_matrix(Bz, **kwargs)           
+            mat += self.zeeman_matrix(Bz, **kwargs)
         return mat
 
     @atomic_units("energy")
@@ -174,10 +177,10 @@ class Hamiltonian(object):
         If units is not specified, eigenvalues are returned in atomic units.
 
         args:
-            electric_field          :: Iterable      [V / m]
+            electric_field          :: numpy.ndarray [V / m]
             magnetic_field=None     :: Number        [T]
             elements=False
-                    :: Boolean
+                    :: bool
                             if True return eigenvectors
 
                     :: list or np.ndarray
@@ -220,7 +223,7 @@ class Hamiltonian(object):
         for i in trange(num_fields,
                         desc="diagonalise matrix", **tqdm_kw):
             Fz = electric_field[i] * e * a0 / En_h
-            mat = base_matrix + self.stark_matrix(Fz=Fz)
+            mat = base_matrix + Fz * self._stark_matrix
             # diagonalise
             if isinstance(elements, Iterable):
                 values[i], vec = np.linalg.eigh(mat)
@@ -245,8 +248,8 @@ class Hamiltonian(object):
         If units is not specified, eigenvalues are returned in atomic units.
 
         args:
-            magnetic_field          :: Iterable      [T]
-            electric_field=None     :: Number        [V / m]
+            magnetic_field          :: numpy.ndarray    [T]
+            electric_field=None     :: Number           [V / m]
             elements=False
                     :: Boolean
                             if True return eigenvectors
@@ -291,7 +294,7 @@ class Hamiltonian(object):
         for i in trange(num_fields,
                         desc="diagonalise matrix", **tqdm_kw):
             Bz = magnetic_field[i] * mu_B / En_h
-            mat = base_matrix + self.zeeman_matrix(Bz=Bz)
+            mat = base_matrix + Bz * self._zeeman_matrix
             # diagonalise
             if isinstance(elements, Iterable):
                 values[i], vec = np.linalg.eigh(mat)

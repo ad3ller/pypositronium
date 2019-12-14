@@ -32,7 +32,9 @@ def fine_structure(state):
         H. A. Bethe and E. E. Salpeter (1957)
         Quantum Mechanics of One- and Two-Electron Systems
     """
-    return (11 / 32 * state.n**-4 + (epsilon(state) - 1.0 / (2*state.L + 1)) * 1.0 / (state.n**3.0)) * alpha**2.0
+    return (11 / 32 * state.n**-4
+            + (epsilon(state) - 1.0 / (2*state.L + 1))
+            * 1.0 / (state.n**3.0)) * alpha**2.0
 
 
 @atomic_units('energy')

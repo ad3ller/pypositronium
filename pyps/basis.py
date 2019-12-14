@@ -105,10 +105,10 @@ class Basis(UserList):
 
     def attrib(self, attribute):
         """ Attribute values for all elements in the basis.
-        
+
         args:
             attribute :: str           e.g., n or J.
-        
+
         return:
             generator
         """
