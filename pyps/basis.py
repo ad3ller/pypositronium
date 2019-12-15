@@ -2,6 +2,7 @@
 """
 from collections import UserList
 from dataclasses import dataclass
+import numpy as np
 from .energy import energy
 
 
@@ -55,7 +56,7 @@ class State:
         return:
             str
         """
-        L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L % 22)]
+        L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L / 22)]
         tex_str = f"${self.n}^{2* self.S + 1}{L}_{self.J}"
         if show_MJ:
             tex_str += f'\\,(M_J = {self.MJ})$'
@@ -69,9 +70,9 @@ class Basis(UserList):
 
     args:
         n_values :: Iterable
-        L_values :: None or Iterable (default: range(n))
-        S_values :: None or Iterable (default: [0, 1])
-        MJ_values :: None or Iterable (default: [-J, ... J])
+        L_values ::  Iterable (range(n) if None)
+        S_values ::  Iterable ([0, 1] if None)
+        MJ_values :: Iterable ([-J, ... J] if None)
 
         filter_function :: None or Function
         sort_key :: None or Function [default: energy()]
@@ -81,7 +82,7 @@ class Basis(UserList):
         num_states :: int
 
     methods:
-        attrib
+        values
             attribute values of the basis
         where
             a subset of the basis
@@ -103,37 +104,48 @@ class Basis(UserList):
         """ size of the basis set """
         return len(self.data)
 
-    def attrib(self, attribute):
+    def values(self, attribute, ndarray=False):
         """ Attribute values for all elements in the basis.
 
         args:
             attribute :: str           e.g., n or J.
+            ndarray    :: bool
 
         return:
-            generator
+            generator or numpy.ndarray
+
+        example:
+            n_values = list(basis.values('n'))
         """
+        if ndarray:
+            return np.array(list(self.values(attribute)))
         return (getattr(el, attribute) for el in self.data)
 
-    def where(self, function):
+    def where(self, function, ndarray=False):
         """ Elements where function mapped to basis evaluates as True.
 
         args:
             function :: function
+            ndarray    :: bool
 
         return:
-            generator
+            generator or numpy.ndarray
         """
+        if ndarray:
+            return np.array(list(self.where(function)))
         return (x for x in self if function(x))
 
-    def argwhere(self, function):
+    def argwhere(self, function, ndarray=False):
         """ Indexes where function mapped to basis evaluates as True.
 
         args:
             function :: function
 
         return:
-            generator
+            generator or numpy.ndarray
         """
+        if ndarray:
+            return np.array(list(self.argwhere(function)))
         return (i for i, x in enumerate(self) if function(x))
 
 
