@@ -64,10 +64,10 @@ def atomic_units(dimension):
     -------
 
     >>> @atomic_units('energy')
-    >>> def func():
-    >>>    return 1
+    >>> def func(value, **kwargs):
+    >>>    return value
 
-    >>> func(units='eV')
+    >>> func(1.0, units='eV')
     27.211386470176983
     """
     data = conversion_data[dimension]
