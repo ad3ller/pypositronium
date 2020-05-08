@@ -55,10 +55,10 @@ conversion_data['electric field']["V/cm"] = (conversion_data['electric field']["
                                              * 100.0)
 
 
-def atomic_units(dimension):
+def atomic_units(dimension, nargs=1):
     """ A decorator to convert the output of functions
     that return atomic units.  If more than one value is
-    returned, only the first is converted.
+    returned, only the first nargs converted [default=1] .
 
     Example
     -------
@@ -71,7 +71,6 @@ def atomic_units(dimension):
     27.211386470176983
     """
     data = conversion_data[dimension]
-
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, units=None, **kwargs):
@@ -82,7 +81,7 @@ def atomic_units(dimension):
                 # convert au
                 result = func(*args, **kwargs)
                 if isinstance(result, tuple):
-                    return (data[units] * result[0], *result[1:])
+                    return (data[units] * r if i < nargs else r for i, r in enumerate(result))
                 else:
                     return data[units] * result
             else:

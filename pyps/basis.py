@@ -56,7 +56,7 @@ class State:
         return:
             str
         """
-        L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L / 22)]
+        L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L % 22)]
         tex_str = f"${self.n}^{2* self.S + 1}{L}_{self.J}"
         if show_MJ:
             tex_str += f'\\,(M_J = {self.MJ})$'
