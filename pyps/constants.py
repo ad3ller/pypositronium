@@ -81,7 +81,7 @@ def atomic_units(dimension, nargs=1):
                 # convert au
                 result = func(*args, **kwargs)
                 if isinstance(result, tuple):
-                    return (data[units] * r if i < nargs else r for i, r in enumerate(result))
+                    return tuple(data[units] * r if i < nargs else r for i, r in enumerate(result))
                 else:
                     return data[units] * result
             else:
