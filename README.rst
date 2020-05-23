@@ -88,13 +88,13 @@ The `Hamiltonian` class is initialised using a basis.
     >>> # initialize
     >>> mat = Hamiltonian(basis)
 
-The method `eigvals()` returns the eigenvalues.
+The method `eigenvalues()` returns the eigenvalues.
 
 .. code:: ipython3
 
     >>> electric_field = 10.1   # [V / m]
     >>> magnetic_field = 0.1    # [T]
-    >>> en = mat.eigvals(electric_field, magnetic_field, units="eV")
+    >>> en = mat.eigenvalues(electric_field, magnetic_field, units="eV")
     >>> print(en[:5])
 
 .. parsed-literal::
