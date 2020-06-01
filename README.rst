@@ -34,7 +34,7 @@ The main requirements can be installed with `conda <https://anaconda.org/>`_:
 Optional (speed up high-n calculations): 
 Build and install `numerov <https://github.com/ad3ller/numerov>`_.
 
-Also optional (used in some of the example notebooks), is `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
+Some of the example notebooks use `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
 
 And finally, clone the souce code and then install the package
 using setuptools.
