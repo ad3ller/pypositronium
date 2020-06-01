@@ -1,5 +1,5 @@
-""" basis set of atomic quantum states
-"""
+"""Basis set of atomic quantum states."""
+
 from collections import UserList
 from dataclasses import dataclass
 import numpy as np
@@ -8,8 +8,8 @@ from .energy import energy
 
 @dataclass
 class State:
-    """ dataclass for the quantum state ❘n, L, S, J, MJ⟩
-    """
+    """Dataclass for the quantum state ❘n, L, S, J, MJ⟩."""
+
     __slots__ = ['n', 'L', 'S', 'J', 'MJ']
     n: int
     L: int
@@ -18,15 +18,15 @@ class State:
     MJ: int
 
     def __post_init__(self):
-        """ check quantum state """
+        """Check quantum state."""
         self.validate()
 
     def __str__(self):
-        """ ket notation """
+        """Dirac ket notation for quantum state."""
         return f"❘{self.n} {self.L} {self.S} {self.J} {self.MJ}⟩"
 
     def validate(self):
-        """ validate quantum numbers """
+        """Validate quantum numbers."""
         assert isinstance(self.n, int)
         assert self.n > 0
         assert isinstance(self.L, int)
@@ -44,17 +44,20 @@ class State:
         assert -self.J <= self.MJ <= self.J
 
     def energy(self, **kwargs):
-        """ state energy """
+        """Quantum state energy."""
         return energy(self, **kwargs)
 
     def tex(self, show_MJ=True):
-        """ Tex string of the form $n^{2S + 1}L_{J} (M_J = {MJ})$
+        """Tex string of the form $n^{2S + 1}L_{J} (M_J = {MJ})$.
 
-        args:
-            show_MJ=True :: bool
+        Parameters
+        ----------
+        show_MJ=True : bool
 
-        return:
-            str
+        Returns
+        -------
+        str
+
         """
         L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L % 22)]
         tex_str = f"${self.n}^{2* self.S + 1}{L}_{self.J}"
@@ -66,32 +69,38 @@ class State:
 
 
 class Basis(UserList):
-    """ A UserList of States
+    """A UserList of State instances.
 
-    args:
-        n_values :: Iterable
-        L_values ::  Iterable (range(n) if None)
-        S_values ::  Iterable ([0, 1] if None)
-        MJ_values :: Iterable ([-J, ... J] if None)
+    Attributes
+    ----------
+    data : list
+    num_states : int
 
-        filter_function :: None or Function
-        sort_key :: None or Function [default: energy()]
+    Methods
+    -------
+    values(attribute, ndarray=False)
+        Attribute values of the basis.
+    where(function, ndarray=False)
+        Subset of the basis.
+    argwhere(function, ndarray=False)
+        Indexes of a subset of the basis.
 
-    attributes:
-        data :: list
-        num_states :: int
-
-    methods:
-        values
-            attribute values of the basis
-        where
-            a subset of the basis
-        argwhere
-            indexes of a subset of the basis
     """
+
     def __init__(self, n_values, L_values=None, S_values=None, MJ_values=None,
                  filter_function=None, sort_key=energy):
-        """ Initialise collections.UserList """
+        """Initialize Hamiltonian.
+
+        Parameters
+        ----------
+        n_values : Iterable
+        L_values : Iterable (range(n) if None)
+        S_values : Iterable ([0, 1] if None)
+        MJ_values : Iterable ([-J, ... J] if None)
+        filter_function : None or Function
+        sort_key : None or Function [default: energy()]
+
+        """
         basis = generate_basis(n_values, L_values, S_values, MJ_values)
         if filter_function is not None:
             basis = filter(filter_function, basis)
@@ -101,48 +110,59 @@ class Basis(UserList):
 
     @property
     def num_states(self):
-        """ size of the basis set """
+        """Size of the basis set."""
         return len(self.data)
 
     def values(self, attribute, ndarray=False):
-        """ Attribute values for all elements in the basis.
+        """Attribute values for all elements in the basis.
 
-        args:
-            attribute :: str           e.g., n or J.
-            ndarray    :: bool
+        Parameters
+        ----------
+        attribute : str
+            e.g., n or J.
+        ndarray : bool
 
-        return:
-            generator or numpy.ndarray
+        Returns
+        -------
+        generator or numpy.ndarray
 
-        example:
-            n_values = list(basis.values('n'))
+        Examples
+        --------
+        >>> n_values = list(basis.values('n'))
+
         """
         if ndarray:
             return np.array(list(self.values(attribute)))
         return (getattr(el, attribute) for el in self.data)
 
     def where(self, function, ndarray=False):
-        """ Elements where function mapped to basis evaluates as True.
+        """Elements where function mapped to basis evaluates as True.
 
-        args:
-            function :: function
-            ndarray    :: bool
+        Parameters
+        ----------
+        function : Function
+        ndarray : bool
 
-        return:
-            generator or numpy.ndarray
+        Returns
+        -------
+        generator or numpy.ndarray
+
         """
         if ndarray:
             return np.array(list(self.where(function)))
         return (x for x in self if function(x))
 
     def argwhere(self, function, ndarray=False):
-        """ Indexes where function mapped to basis evaluates as True.
+        """Indexes where function mapped to basis evaluates as True.
 
-        args:
-            function :: function
+        Parameters
+        ----------
+        function :: Function
 
-        return:
-            generator or numpy.ndarray
+        Returns
+        -------
+        generator or numpy.ndarray
+
         """
         if ndarray:
             return np.array(list(self.argwhere(function)))
@@ -150,16 +170,19 @@ class Basis(UserList):
 
 
 def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):
-    """ generate instances of State
+    """Generate instances of State.
 
-    args:
-        n_values :: Iterable
-        L_values :: None or Iterable (default: range(n))
-        S_values :: None or Iterable (default: [0, 1])
-        MJ_values :: None or Iterable (default: [-J, ... J])
+    Parameters
+    ----------
+    n_values :: Iterable
+    L_values :: None or Iterable (default: range(n))
+    S_values :: None or Iterable (default: [0, 1])
+    MJ_values :: None or Iterable (default: [-J, ... J])
 
-    return:
-        generator
+    Yields
+    ------
+    State
+
     """
     if L_values is None:
         L_values = range(max(n_values))

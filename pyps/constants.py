@@ -1,5 +1,5 @@
-""" physical constants
-"""
+"""Physical constants."""
+
 import functools
 
 # CODATA 2014, DOI: 10.1103/RevModPhys.88.035009
@@ -56,21 +56,27 @@ conversion_data['electric field']["V/cm"] = (conversion_data['electric field']["
 
 
 def atomic_units(dimension, nargs=1):
-    """ A decorator to convert the output of functions
-    that return atomic units.  If more than one value is
-    returned, only the first nargs converted [default=1] .
+    """Convert the units of functions that return atomic units.
 
-    Example
-    -------
+    Parameters
+    ----------
+    dimension : str
+        Name of the unit type, e.g., 'energy' or 'length'
+    nargs=1 : int
+        Number of returned items to convert
 
+    Examples
+    --------
     >>> @atomic_units('energy')
     >>> def func(value, **kwargs):
     >>>    return value
 
     >>> func(1.0, units='eV')
     27.211386470176983
+
     """
     data = conversion_data[dimension]
+
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, units=None, **kwargs):
@@ -93,19 +99,22 @@ def atomic_units(dimension, nargs=1):
 
 
 def convert_au(value, dimension, units, reverse=False):
-    """ Convert 'value' in atomic units to 'units', or the reverse.
+    """Convert 'value' in atomic units to 'units', or the reverse.
 
-    args:
-        value :: Number or np.ndarray()
-        dimension :: str
-            e.g., 'energy' or 'length'
-        units :: str
-            e.g., 'joule'
-        reverse :: bool
-            convert from units to atomic_units
+    Parameters
+    ----------
+    value : Number or numpy.ndarray()
+    dimension : str
+        e.g., 'energy' or 'length'
+    units : str
+        e.g., 'joule' or 'SI'
+    reverse : bool
+        convert from units to atomic_units
 
-    return:
-        converted value
+    Returns
+    -------
+    converted value
+
     """
     if reverse:
         return value / atomic_units(dimension)(lambda: 1)(units=units)

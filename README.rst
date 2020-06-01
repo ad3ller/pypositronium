@@ -34,6 +34,8 @@ The main requirements can be installed with `conda <https://anaconda.org/>`_:
 Optional (speed up high-n calculations): 
 Build and install `numerov <https://github.com/ad3ller/numerov>`_.
 
+Also optional (used in some of the example notebooks), is `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
+
 And finally, clone the souce code and then install the package
 using setuptools.
 
@@ -86,15 +88,15 @@ The `Hamiltonian` class is initialised using a basis.
 .. code:: ipython3
 
     >>> # initialize
-    >>> mat = Hamiltonian(basis)
+    >>> H = Hamiltonian(basis)
 
-The method `eigenvalues()` returns the eigenvalues.
+Calculate the eigenvalues in applied fields.
 
 .. code:: ipython3
 
     >>> electric_field = 10.1   # [V / m]
     >>> magnetic_field = 0.1    # [T]
-    >>> en = mat.eigenvalues(electric_field, magnetic_field, units="eV")
+    >>> en = H.eigenvalues(electric_field, magnetic_field, units="eV")
     >>> print(en[:5])
 
 .. parsed-literal::
@@ -104,29 +106,14 @@ The method `eigenvalues()` returns the eigenvalues.
 The methods `stark_map()` and `zeeman_map()` calculate the
 eigenvalues for a range of electric or magnetic fields.
 
-See the notebooks for examples (some of which require https://github.com/ad3ller/Stark-map-tools.)
-
-Version information
--------------------
-
-==========  ====================================================
-Python      3.7.3 64bit [GCC 7.3.0]
-IPython     7.9.0
-OS          Linux 5.0.0 27 generic x86_64 with debian buster sid
-cython      0.29.12
-matplotlib  3.1.0
-numerov     0.0.5
-numpy       1.16.4
-sympy       1.4
-tqdm        4.39.0
-==========  ====================================================
+See the notebooks for examples.
 
 
 Examples
 --------
 
 
-This code has not  been tested extensively, although several published calculations have been reproduced.
+This code has not been tested extensively, although several published calculations have been reproduced.
 
 ----
 

@@ -1,14 +1,21 @@
-""" Zeeman effect
-"""
+"""Zeeman effect for positronium."""
+
 import numpy as np
 from sympy.physics.wigner import wigner_3j, wigner_6j
 
 
 def zeeman_interaction(state_1, state_2):
-    """ Zeeman interaction between two states,
+    """Zeeman interaction between two states.
 
-        returns:
-            ⟨ state_2 | Hz | state_1 ⟩
+    Paramters
+    ---------
+    state_1 : State
+    state_2 : State
+
+    Returns
+    -------
+    float
+
     """
     if state_1.L == state_2.L:
         return ((-1.0)**(state_1.L + state_1.MJ)
