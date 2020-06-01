@@ -36,7 +36,7 @@ Build and install `numerov <https://github.com/ad3ller/numerov>`_.
 
 Some of the example notebooks use `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
 
-And finally, clone the souce code and then install the package
+Finally, clone the souce code and then install the package
 using setuptools.
 
 .. code-block:: bash
