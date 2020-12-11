@@ -10,7 +10,6 @@ from .energy import energy
 class State:
     """Dataclass for the quantum state ❘n, L, S, J, MJ⟩."""
 
-    __slots__ = ['n', 'L', 'S', 'J', 'MJ']
     n: int
     L: int
     S: int
@@ -62,9 +61,9 @@ class State:
         L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L % 22)]
         tex_str = f"${self.n}^{2* self.S + 1}{L}_{self.J}"
         if show_MJ:
-            tex_str += f'\\,(M_J = {self.MJ})$'
+            tex_str += f"\\,(M_J = {self.MJ})$"
         else:
-            tex_str += '$'
+            tex_str += "$"
         return tex_str
 
 
@@ -87,8 +86,15 @@ class Basis(UserList):
 
     """
 
-    def __init__(self, n_values, L_values=None, S_values=None, MJ_values=None,
-                 filter_function=None, sort_key=energy):
+    def __init__(
+        self,
+        n_values,
+        L_values=None,
+        S_values=None,
+        MJ_values=None,
+        filter_function=None,
+        sort_key=energy,
+    ):
         """Initialize Hamiltonian.
 
         Parameters

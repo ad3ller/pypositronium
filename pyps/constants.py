@@ -11,7 +11,7 @@ e = 1.6021766208e-19
 m_e = 9.10938356e-31
 alpha = 7.2973525664e-3
 m_u = 1.660539040e-27
-En_h = alpha**2.0 * m_e * c**2.0
+En_h = alpha ** 2.0 * m_e * c ** 2.0
 a0 = hbar / (m_e * c * alpha)
 mu_B = e * hbar / (2.0 * m_e)
 
@@ -28,31 +28,32 @@ a_ps = a0 / mu_me
 conversion_data = dict()
 
 # energy
-conversion_data['energy'] = dict()
-conversion_data['energy']["SI"] = conversion_data['energy']["joule"] \
-                                = conversion_data['energy']["J"] \
-                                = En_h
-conversion_data['energy']["electronvolt"] = conversion_data['energy']["eV"] \
-                                          = En_h / e
-conversion_data['energy']["Hz"] = En_h / h
-conversion_data['energy']["/m"] = En_h / (c * h)
-conversion_data['energy']["/cm"] = conversion_data['energy']["wavenumbers"] \
-                                 = conversion_data['energy']["kayser"] \
-                                 = conversion_data['energy']["/m"] / 100.0
+conversion_data["energy"] = dict()
+conversion_data["energy"]["SI"] = conversion_data["energy"]["joule"] = conversion_data[
+    "energy"
+]["J"] = En_h
+conversion_data["energy"]["electronvolt"] = conversion_data["energy"]["eV"] = En_h / e
+conversion_data["energy"]["Hz"] = En_h / h
+conversion_data["energy"]["/m"] = En_h / (c * h)
+conversion_data["energy"]["/cm"] = conversion_data["energy"][
+    "wavenumbers"
+] = conversion_data["energy"]["kayser"] = (conversion_data["energy"]["/m"] / 100.0)
 
 # length
-conversion_data['length'] = dict()
-conversion_data['length']["SI"] = conversion_data['length']["meter"] \
-                                = conversion_data['length']["m"] \
-                                = a0
-conversion_data['length']["cm"] = conversion_data['length']["m"] * 100.0
+conversion_data["length"] = dict()
+conversion_data["length"]["SI"] = conversion_data["length"]["meter"] = conversion_data[
+    "length"
+]["m"] = a0
+conversion_data["length"]["cm"] = conversion_data["length"]["m"] * 100.0
 
 # electric field
-conversion_data['electric field'] = dict()
-conversion_data['electric field']["SI"] = conversion_data['electric field']["V/m"] \
-                                        = En_h / (e * a0)
-conversion_data['electric field']["V/cm"] = (conversion_data['electric field']["V/m"]
-                                             * 100.0)
+conversion_data["electric field"] = dict()
+conversion_data["electric field"]["SI"] = conversion_data["electric field"][
+    "V/m"
+] = En_h / (e * a0)
+conversion_data["electric field"]["V/cm"] = (
+    conversion_data["electric field"]["V/m"] * 100.0
+)
 
 
 def atomic_units(dimension, nargs=1):
@@ -87,14 +88,21 @@ def atomic_units(dimension, nargs=1):
                 # convert au
                 result = func(*args, **kwargs)
                 if isinstance(result, tuple):
-                    return tuple(data[units] * r if i < nargs else r for i, r in enumerate(result))
+                    return tuple(
+                        data[units] * r if i < nargs else r
+                        for i, r in enumerate(result)
+                    )
                 else:
                     return data[units] * result
             else:
                 supported_units = list(data.keys())
-                raise ValueError(f"unrecognised {dimension} units : {units} \n"
-                                 + f"supported units: {supported_units}")
+                raise ValueError(
+                    f"unrecognised {dimension} units : {units} \n"
+                    + f"supported units: {supported_units}"
+                )
+
         return wrapper
+
     return decorator
 
 

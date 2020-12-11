@@ -24,6 +24,8 @@ Radial wavefunctions are obtained using the Numerov method, as described by:
 Install
 -------
 
+python 3.9+
+
 The main requirements can be installed with `conda <https://anaconda.org/>`_:
 
 .. code-block:: bash

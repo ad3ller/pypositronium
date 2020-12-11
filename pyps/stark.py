@@ -1,10 +1,20 @@
 """Stark effect for positronium."""
 
+import warnings
 import numpy as np
 from sympy import integrate, oo, var
 from sympy.physics.hydrogen import R_nl
 from sympy.physics.wigner import wigner_3j, wigner_6j
 from .constants import mu_me
+
+# cache decorator
+try:
+    from functools import cache
+except ImportError:
+    # python < 3.9
+    from functools import lru_cache
+
+    cache = lambda f: lru_cache(f, None)
 
 # optional import
 try:
@@ -13,16 +23,23 @@ except ImportError:
     radial_numerov = None
 
 
-def radial_integral(n1, l1, n2, l2,
-                    numerov=False, numerov_step=0.005, numerov_rmin=0.65):
-    """Calculate the radial lintegral for two states of hydrogen.
+@lru_cache(None)
+def _radial_integral(
+    n1, l1, n2, l2, numerov=False, numerov_step=0.005, numerov_rmin=0.65
+):
+    """Calculate the radial integral (cached).
 
     Parameters
     ----------
     n1 : int
+        principal quantum number, state 1
     l1 : int
+        orbital angular momentum, state 1
     n2 : int
+        principal quantum number, state 2
     l2 : int
+        orbital angular momentum, state 2
+
     numerov=False : bool
     numerov_step=0.005 : float
     numerov_rmin=0.65 : float
@@ -41,14 +58,56 @@ def radial_integral(n1, l1, n2, l2,
     >>> radial_integral(10, 4, 11, 5, numerov=True)
     63.496017658724504
 
+    Nb.  If numerov fails, automatically reverts to sympy
+
     """
     if numerov:
-        return radial_numerov(n1, l1, n2, l2,
-                              step=numerov_step,
-                              rmin=numerov_rmin)
+        ri = float(radial_numerov(n1, l1, n2, l2, step=numerov_step, rmin=numerov_rmin))
+        if not np.isnan(ri):
+            return ri
+        else:
+            # TODO fix numerov.radial_integral()
+            warnings.warn(
+                f"numerov.radial_integral returned nan for n1={n1}, l1={l1}, n2={n2}, l2={l2}.\\Fallback to scipy"
+            )
     var("r")
-    return float(integrate(R_nl(n1, l1, r) * r**3 * R_nl(n2, l2, r),
-                           (r, 0, oo)).evalf())
+    return float(
+        integrate(R_nl(n1, l1, r) * r ** 3 * R_nl(n2, l2, r), (r, 0, oo)).evalf()
+    )
+
+
+@lru_cache(None)
+def _ang_integral(S, L1, J1, MJ1, L2, J2, MJ2):
+    """Calculate the angular integral (cached).
+
+    Parameters
+    ----------
+    S : int
+        spin
+    L1 : int
+        orbital angular momentum, state 1
+    J1 : int
+        total angular momentum, state 1
+    MJ1 : int
+        projection of the total angular momentum, state 1
+    L2 : int
+        orbital angular momentum, state 2
+    J2 : int
+        total angular momentum, state 2
+    MJ2 : int
+        projection of the total angular momentum, state 2
+
+    Returns
+    -------
+    float
+
+    """
+    return float(
+        (-1.0) ** (S + 1 + MJ2)
+        * np.sqrt(max(L1, L2) * (2 * J2 + 1) * (2 * J1 + 1))
+        * wigner_3j(J2, 1, J1, -MJ2, 0, MJ1)
+        * wigner_6j(S, L2, J2, 1, J1, L1)
+    )
 
 
 def stark_interaction(state_1, state_2, numerov=False):
@@ -66,17 +125,24 @@ def stark_interaction(state_1, state_2, numerov=False):
     float
 
     """
-    if abs(state_1.L - state_2.L) == 1 and state_1.S == state_2.S:
-        return ((-1.0)**(state_1.S + 1 + state_2.MJ)
-                * np.sqrt(max(state_1.L, state_2.L)
-                          * (2*state_2.J + 1)
-                          * (2*state_1.J + 1))
-                * wigner_3j(state_2.J, 1, state_1.J,
-                            -state_2.MJ, 0, state_1.MJ)
-                * wigner_6j(state_2.S, state_2.L, state_2.J,
-                            1, state_1.J, state_1.L)
-                * radial_integral(state_1.n, state_1.L,
-                                  state_2.n, state_2.L,
-                                  numerov=numerov)
-                / mu_me)
+    if (
+        abs(state_1.L - state_2.L) == 1
+        and state_1.S == state_2.S
+        and state_1.MJ == state_2.MJ
+    ):
+        return (
+            _ang_integral(
+                state_1.S,
+                state_1.L,
+                state_1.J,
+                state_1.MJ,
+                state_2.L,
+                state_2.J,
+                state_2.MJ,
+            )
+            * _radial_integral(
+                state_1.n, state_1.L, state_2.n, state_2.L, numerov=numerov
+            )
+            / mu_me
+        )
     return 0.0
