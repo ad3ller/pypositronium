@@ -14,7 +14,7 @@ except ImportError:
     # python < 3.9
     from functools import lru_cache
 
-    cache = lambda f: lru_cache(f, None)
+    cache = lambda func: lru_cache(None)(func)
 
 # optional import
 try:
@@ -23,7 +23,7 @@ except ImportError:
     radial_numerov = None
 
 
-@lru_cache(None)
+@cache
 def _radial_integral(
     n1, l1, n2, l2, numerov=False, numerov_step=0.005, numerov_rmin=0.65
 ):
@@ -76,7 +76,7 @@ def _radial_integral(
     )
 
 
-@lru_cache(None)
+@cache
 def _ang_integral(S, L1, J1, MJ1, L2, J2, MJ2):
     """Calculate the angular integral (cached).
 

@@ -10,10 +10,10 @@ except ImportError:
     # python < 3.9
     from functools import lru_cache
 
-    cache = lambda f: lru_cache(f, None)
+    cache = lambda func: lru_cache(None)(func)
 
 
-@lru_cache(None)
+@cache
 def _zeeman(L, S1, J1, MJ1, S2, J2, MJ2):
     """Ps Zeeman interaction (cached function).
 
