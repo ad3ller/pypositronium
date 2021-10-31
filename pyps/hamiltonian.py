@@ -25,7 +25,7 @@ class Hamiltonian(object):
 
     Methods
     -------
-    clear_cache()
+    reset()
         Wipe the in-memory cache of sparse matrices.
     e0_matrix()
         Field-free Hamiltonian matrix.
@@ -57,9 +57,9 @@ class Hamiltonian(object):
         """
         self.basis = basis
         self.dims = (self.basis.num_states, self.basis.num_states)
-        self.clear_cache()
+        self.reset()
 
-    def clear_cache(self):
+    def reset(self):
         """Wipe the in-memory cache of sparse matrices."""
         self._e0_matrix = None
         self._stark_z_matrix = None
@@ -151,7 +151,7 @@ class Hamiltonian(object):
             self._zeeman_matrix = mat.asformat("csr")
         return self._zeeman_matrix
 
-    def matrix(self, Fz=0.0, Bz=0.0, **kwargs):
+    def matrix(self, Fz=None, Bz=None, **kwargs):
         """Total Hamiltonian matrix.
 
         Parameters
@@ -167,9 +167,9 @@ class Hamiltonian(object):
 
         """
         mat = self.e0_matrix().asformat("csr")
-        if Fz is not None and Fz != 0.0:
+        if Fz is not None:
             mat += Fz * self.stark_matrix(**kwargs)
-        if Bz is not None and Bz != 0.0:
+        if Bz is not None:
             mat += Bz * self.zeeman_matrix(**kwargs)
         return mat
 

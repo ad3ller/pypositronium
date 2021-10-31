@@ -2,18 +2,13 @@
 
 import numpy as np
 from sympy.physics.wigner import wigner_3j, wigner_6j
+from .constants import CACHE_MAXSIZE
 
 # cache decorator
-try:
-    from functools import cache
-except ImportError:
-    # python < 3.9
-    from functools import lru_cache
-
-    cache = lambda func: lru_cache(None)(func)
+from functools import lru_cache
 
 
-@cache
+@lru_cache(CACHE_MAXSIZE)
 def _zeeman(L, S1, J1, MJ1, S2, J2, MJ2):
     """Ps Zeeman interaction (cached function).
 

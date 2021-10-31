@@ -5,16 +5,10 @@ import numpy as np
 from sympy import integrate, oo, var
 from sympy.physics.hydrogen import R_nl
 from sympy.physics.wigner import wigner_3j, wigner_6j
-from .constants import mu_me
+from .constants import CACHE_MAXSIZE, mu_me
 
 # cache decorator
-try:
-    from functools import cache
-except ImportError:
-    # python < 3.9
-    from functools import lru_cache
-
-    cache = lambda func: lru_cache(None)(func)
+from functools import lru_cache
 
 # optional import
 try:
@@ -23,7 +17,7 @@ except ImportError:
     radial_numerov = None
 
 
-@cache
+@lru_cache(CACHE_MAXSIZE)
 def _radial_integral(
     n1, l1, n2, l2, numerov=False, numerov_step=0.005, numerov_rmin=0.65
 ):
@@ -76,7 +70,7 @@ def _radial_integral(
     )
 
 
-@cache
+@lru_cache(CACHE_MAXSIZE)
 def _ang_integral(S, L1, J1, MJ1, L2, J2, MJ2):
     """Calculate the angular integral (cached).
 

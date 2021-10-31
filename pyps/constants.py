@@ -2,6 +2,8 @@
 
 import functools
 
+CACHE_MAXSIZE = int(1e7)
+
 # CODATA 2014, DOI: 10.1103/RevModPhys.88.035009
 c = 299792458.0
 h = 6.626070040e-34
