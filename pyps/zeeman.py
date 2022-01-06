@@ -33,6 +33,11 @@ def _zeeman(L, S1, J1, MJ1, S2, J2, MJ2):
     -------
     float
 
+    References
+    ----------
+    C. D. Dermer and J. C. Weisheit (1989)
+    Phys Rev A, 40, 5526. doi: 10.1103/physreva.40.5526. 
+
     """
     return float(
         (-1.0) ** (L + MJ1)
@@ -57,7 +62,8 @@ def zeeman_interaction(state_1, state_2):
 
     """
     if (
-        abs(state_1.S - state_2.S) == 1
+        state_1.S != state_2.S
+        and state_1.n == state_2.n
         and state_1.L == state_2.L
         and state_1.MJ == state_2.MJ
     ):
