@@ -77,25 +77,29 @@ class Basis(UserList):
 
     Methods
     -------
+    update(states):
+        Update the list of states.
     values(attribute, ndarray=False)
         Attribute values of the basis.
     where(function, ndarray=False)
-        Subset of the basis.
+        Elements of the basis.
     argwhere(function, ndarray=False)
-        Indexes of a subset of the basis.
+        Indexes of the basis.
+    extract_states(inds):
+        Subset of the basis set.
 
     """
 
     def __init__(
         self,
-        n_values,
+        n_values=None,
         L_values=None,
         S_values=None,
         MJ_values=None,
         filter_function=None,
         sort_key=energy,
     ):
-        """Initialize Hamiltonian.
+        """Initialize basis set.
 
         Parameters
         ----------
@@ -107,12 +111,23 @@ class Basis(UserList):
         sort_key : None or Function [default: energy()]
 
         """
-        basis = generate_basis(n_values, L_values, S_values, MJ_values)
+        states = generate_basis(n_values, L_values, S_values, MJ_values)
         if filter_function is not None:
-            basis = filter(filter_function, basis)
+            states = filter(filter_function, states)
         if sort_key is not None:
-            basis = sorted(basis, key=sort_key)
-        super().__init__(basis)
+            states = sorted(states, key=sort_key)
+        self.update(states)
+
+    def update(self, states):
+        """Update the list of basis states.
+
+        Parameters
+        ----------
+        states : List of instances of State
+
+        """
+        super().__init__(states)
+        return self
 
     @property
     def num_states(self):
@@ -167,12 +182,33 @@ class Basis(UserList):
 
         Returns
         -------
-        generator or numpy.ndarray
+        inds : generator or numpy.ndarray
 
         """
         if ndarray:
             return np.array(list(self.argwhere(function)))
         return (i for i, x in enumerate(self) if function(x))
+
+    def extract_states(self, inds):
+        """Subset of the basis.
+
+        Parameters
+        ----------
+        inds : list or integer
+            The states that should be kept.
+
+        Returns
+        -------
+        Basis
+            A new instance of :class:`basis.Basis` that contains only the states
+            corresponding to the indices in `inds`.
+
+        """
+        if isinstance(inds, int):
+            inds = [inds]
+        states = np.array(self.data)[inds]
+        b = Basis().update(states)
+        return b
 
 
 def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):
@@ -190,6 +226,8 @@ def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):
     State
 
     """
+    if n_values is None:
+        return []
     if L_values is None:
         L_values = range(max(n_values))
     if S_values is None:

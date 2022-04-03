@@ -11,39 +11,74 @@ from .zeeman import zeeman_interaction
 from .constants import atomic_units, mu_B, En_h, e, a0
 
 
+@atomic_units("energy")
+def eigenenergies(M, units=None):
+    """Eigenvalues of M.
+
+    Parameters
+    ----------
+    M : array or sparse matrix
+    units : str, default=None
+
+    Returns
+    -------
+    numpy.ndarray
+
+    """
+    if sp.issparse(M):
+        M = M.toarray()
+    return linalg.eigvalsh(M)
+
+
+@atomic_units("energy")
+def eigenstates(M, units=None):
+    """Eigenvalues and vectors of M.
+
+    Parameters
+    ----------
+    M : array or sparse matrix
+    units : str, default=None
+
+    Returns
+    -------
+    numpy.ndarray
+
+    """
+    if sp.issparse(M):
+        M = M.toarray()
+    return linalg.eigh(M)
+
+
 class Hamiltonian(object):
     """Hamiltonian
 
     Attributes
     ----------
     basis : Basis
-        The basis set of instances of State
+        A list of instances of State.
     dims : (int, int)
-        The dimensions of the Hamiltonian matrix
-    e0 : numpy.array
-        Field-free energies of the basis states.
+        The dimensions of the Hamiltonian matrix.
 
     Methods
     -------
     reset()
         Wipe the in-memory cache of sparse matrices.
-    e0_matrix()
+    e0()
         Field-free Hamiltonian matrix.
-    stark_matrix(Fz)
+    stark(Fz)
         Stark interaction matrix.
-    zeeman_matrix(Bz)
+    zeeman(Bz)
         Zeeman interaction matrix.
-    matrix(Fz, Bz)
+    total(Fz, Bz)
         Total Hamiltonian matrix.
-    eigenvalues(electric_field, magnetic_field)
+    eigenenergies(electric_field, magnetic_field)
         Eigenvalues of the total Hamiltonian.
-    eigenvectors(electric_field, magnetic_field)
+    eigenstates(electric_field, magnetic_field)
         Eigenvalues and vectors of the total Hamiltonian.
-    stark_map((electric_fields)
+    stark_map(electric_fields)
         Eigenvalues of the Hamiltonian for a range of electric fields.
-    zeeman_map((magnetic_fields)
+    zeeman_map(magnetic_fields)
         Eigenvalues of the Hamiltonian for a range of magnetic fields.
-
     """
 
     def __init__(self, basis, sparse_format="csr"):
@@ -55,7 +90,6 @@ class Hamiltonian(object):
             list of State instances.
         sparse_format="csr" : str
             sparse matrix format, e.g., "csr",  "csc" or "array".
-
         """
         self.basis = basis
         self.dims = (self.basis.num_states, self.basis.num_states)
@@ -63,41 +97,31 @@ class Hamiltonian(object):
         self.reset()
 
     def reset(self):
-        """Wipe the in-memory cache of sparse matrices."""
+        """Clear the in-memory cache of sparse matrices."""
         self._e0_matrix = None
         self._stark_z_matrix = None
         self._zeeman_matrix = None
 
-    @property
     def e0(self):
-        """Field-free energy of the basis set [atomic units].
-
-        Returns
-        -------
-        numpy.ndarray
-
-        """
-        return np.array([energy(x) for x in self.basis])
-
-    def e0_matrix(self):
         """Field-free Hamiltonian matrix.
 
         Returns
         -------
         scipy.sparse.csr_matrix [atomic units]
-
         """
         if self._e0_matrix is None:
             self._e0_matrix = sp.dia_matrix(
-                (self.e0, 0), shape=self.dims, dtype=float
+                ([energy(x) for x in self.basis], 0), shape=self.dims, dtype=float
             ).asformat(self.sparse_format)
         return self._e0_matrix
 
-    def stark_matrix(self, **kwargs):
+    def stark(self, Fz, **kwargs):
         """Stark interaction matrix.
 
         Parameters
         ----------
+        Fz : float
+            electric field along z [atomic units]
         tqdm_kw={} : dict
             progress bar options, e.g, tqdm_kw={disable : True}
         numerov=False : bool
@@ -106,7 +130,6 @@ class Hamiltonian(object):
         Returns
         -------
         scipy.sparse.csr_matrix [atomic units]
-
         """
         if self._stark_z_matrix is None:
             tqdm_kw = kwargs.get("tqdm_kw", {})
@@ -124,20 +147,21 @@ class Hamiltonian(object):
                     # assume matrix is symmetric
                     mat[j, i] = si
             self._stark_z_matrix = mat.asformat(self.sparse_format)
-        return self._stark_z_matrix
+        return Fz * self._stark_z_matrix
 
-    def zeeman_matrix(self, **kwargs):
+    def zeeman(self, Bz, **kwargs):
         """Zeeman interaction matrix.
 
         Parameters
         ----------
+        Bz : float
+            magnetic field along z [atomic units]
         tqdm_kw={} : dict
             progress bar options, e.g, tqdm_kw={disable : True}
 
         Returns
         -------
         scipy.sparse.csr_matrix [atomic units]
-
         """
         if self._zeeman_matrix is None:
             tqdm_kw = kwargs.get("tqdm_kw", {})
@@ -154,9 +178,9 @@ class Hamiltonian(object):
                     if i != j:
                         mat[j, i] = zi
             self._zeeman_matrix = mat.asformat(self.sparse_format)
-        return self._zeeman_matrix
+        return Bz * self._zeeman_matrix
 
-    def matrix(self, Fz=None, Bz=None, **kwargs):
+    def total(self, Fz=None, Bz=None, **kwargs):
         """Total Hamiltonian matrix.
 
         Parameters
@@ -169,17 +193,18 @@ class Hamiltonian(object):
         Returns
         -------
         scipy.sparse.csr_matrix [atomic units]
-
         """
-        mat = self.e0_matrix()
-        if Fz is not None:
-            mat += Fz * self.stark_matrix(**kwargs)
-        if Bz is not None:
-            mat += Bz * self.zeeman_matrix(**kwargs)
-        return mat
+        M = self.e0().copy()
+        if Fz is not None and Fz != 0.0:
+            M += self.stark(Fz, **kwargs)
+        if Bz is not None and Bz != 0.0:
+            M += self.zeeman(Bz, **kwargs)
+        return M
 
     @atomic_units("energy")
-    def eigenvalues(self, electric_field=0.0, magnetic_field=0.0, units=None, **kwargs):
+    def eigenenergies(
+        self, electric_field=0.0, magnetic_field=0.0, units=None, **kwargs
+    ):
         """Eigenvalues of the total Hamiltonian.
 
         Parameters
@@ -191,19 +216,14 @@ class Hamiltonian(object):
         Returns
         -------
         eigenvalues : numpy.ndarray
-
         """
         Fz = electric_field * e * a0 / En_h
         Bz = magnetic_field * mu_B / En_h
-        mat = self.matrix(Fz, Bz, **kwargs)
-        if sp.issparse(mat):
-            mat = mat.toarray()
-        return linalg.eigvalsh(mat)
+        M = self.total(Fz, Bz, **kwargs)
+        return eigenenergies(M)
 
     @atomic_units("energy")
-    def eigenvectors(
-        self, electric_field=0.0, magnetic_field=0.0, units=None, **kwargs
-    ):
+    def eigenstates(self, electric_field=0.0, magnetic_field=0.0, units=None, **kwargs):
         """Eigenvalues and vectors of the total Hamiltonian.
 
         Parameters
@@ -219,10 +239,8 @@ class Hamiltonian(object):
         """
         Fz = electric_field * e * a0 / En_h
         Bz = magnetic_field * mu_B / En_h
-        mat = self.matrix(Fz, Bz, **kwargs)
-        if sp.issparse(mat):
-            mat = mat.toarray()
-        return linalg.eigh(mat)
+        M = self.total(Fz, Bz, **kwargs)
+        return eigenstates(M)
 
     @atomic_units("energy")
     def stark_map(
@@ -269,28 +287,26 @@ class Hamiltonian(object):
                 (num_fields, self.basis.num_states, self.basis.num_states), dtype=float
             )
         # field-free matrix
-        base_matrix = self.e0_matrix()
+        base_matrix = self.e0().copy()
         # magnetic_field
         if magnetic_field is not None and magnetic_field != 0.0:
             Bz = magnetic_field * mu_B / En_h
-            base_matrix += Bz * self.zeeman_matrix(**kwargs)
+            base_matrix += self.zeeman(Bz, **kwargs)
         # get stark matrix
         if self._stark_z_matrix is None:
-            self.stark_matrix(**kwargs)
+            self.stark(1.0, **kwargs)
         # loop over electric field values
         for i in trange(num_fields, desc="diagonalise matrix", **tqdm_kw):
             Fz = electric_field[i] * e * a0 / En_h
-            mat = base_matrix + Fz * self._stark_z_matrix
-            if sp.issparse(mat):
-                mat = mat.toarray()
+            M = base_matrix + Fz * self._stark_z_matrix
             # diagonalise
             if isinstance(elements, Iterable):
-                values[i], vec = linalg.eigh(mat)
+                values[i], vec = eigenstates(M)
                 amplitudes[i] = np.sum(vec[elements, :] ** 2.0, axis=0)
             elif elements:
-                values[i], vectors[i, :, :] = linalg.eigh(mat)
+                values[i], vectors[i, :, :] = eigenstates(M)
             else:
-                values[i] = linalg.eigvalsh(mat)
+                values[i] = eigenenergies(M)
         # output
         if isinstance(elements, Iterable):
             return values, amplitudes
@@ -344,28 +360,26 @@ class Hamiltonian(object):
                 (num_fields, self.basis.num_states, self.basis.num_states), dtype=float
             )
         # field-free matrix
-        base_matrix = self.e0_matrix()
+        base_matrix = self.e0()
         # electric_field
         if electric_field is not None and electric_field != 0.0:
             Fz = electric_field * e * a0 / En_h
-            base_matrix += Fz * self.stark_matrix(**kwargs)
+            base_matrix += self.stark(Fz, **kwargs)
         # get zeeman matrix
         if self._zeeman_matrix is None:
-            self.zeeman_matrix(**kwargs)
+            self.zeeman(1.0, **kwargs)
         # loop over magnetic field values
         for i in trange(num_fields, desc="diagonalise matrix", **tqdm_kw):
             Bz = magnetic_field[i] * mu_B / En_h
-            mat = base_matrix + Bz * self._zeeman_matrix
-            if sp.issparse(mat):
-                mat = mat.toarray()
+            M = base_matrix + Bz * self._zeeman_matrix
             # diagonalise
             if isinstance(elements, Iterable):
-                values[i], vec = linalg.eigh(mat)
+                values[i], vec = eigenstates(M)
                 amplitudes[i] = np.sum(vec[elements, :] ** 2.0, axis=0)
             elif elements:
-                values[i], vectors[i, :, :] = linalg.eigh(mat)
+                values[i], vectors[i, :, :] = eigenstates(M)
             else:
-                values[i] = linalg.eigvalsh(mat)
+                values[i] = eigenenergies(M)
         # output
         if isinstance(elements, Iterable):
             return values, amplitudes

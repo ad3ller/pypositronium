@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="pyps",
-    version="0.0.18",
+    version="0.0.19",
     description="Calculate the Stark effect in positronium",
     url="",
     author="Adam Deller",
