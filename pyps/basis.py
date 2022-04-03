@@ -46,6 +46,23 @@ class State:
         """Quantum state energy."""
         return energy(self, **kwargs)
 
+    def ket(self, show_MJ=True):
+        """String of the form |n, l, S, J, [MJ]⟩$.
+
+        Parameters
+        ----------
+        show_MJ=True : bool
+
+        Returns
+        -------
+        str
+
+        """
+        if show_MJ:
+            return f"❘{self.n}, {self.L} {self.S}, {self.J}, {self.MJ}⟩"
+        else:
+            return f"❘{self.n}, {self.L}, {self.S}, {self.J}⟩"
+
     def tex(self, show_MJ=True):
         """Tex string of the form $n^{2S + 1}L_{J} (M_J = {MJ})$.
 

@@ -98,14 +98,14 @@ Calculate the eigenvalues in applied fields.
 
     >>> electric_field = 10.1   # [V / m]
     >>> magnetic_field = 0.1    # [T]
-    >>> en = H.eigenvalues(electric_field, magnetic_field, units="eV")
+    >>> en = H.eigenenergies(electric_field, magnetic_field, units="eV")
     >>> print(en[:5])
 
 .. parsed-literal::
 
     [-6.80332213 -6.8024767  -6.8024767  -6.80247654 -1.70078788]
 
-The methods `stark_map()` and `zeeman_map()` calculate the
+The methods `stark_map()` and `zeeman_map()` calculate the energy
 eigenvalues for a range of electric or magnetic fields.
 
 See the notebooks for examples.
