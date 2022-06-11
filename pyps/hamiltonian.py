@@ -360,7 +360,7 @@ class Hamiltonian(object):
                 (num_fields, self.basis.num_states, self.basis.num_states), dtype=float
             )
         # field-free matrix
-        base_matrix = self.e0()
+        base_matrix = self.e0().copy()
         # electric_field
         if electric_field is not None and electric_field != 0.0:
             Fz = electric_field * e * a0 / En_h

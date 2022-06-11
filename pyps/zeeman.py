@@ -9,7 +9,7 @@ from functools import lru_cache
 
 
 @lru_cache(CACHE_MAXSIZE)
-def _zeeman(L, S1, J1, MJ1, S2, J2, MJ2):
+def _zeeman(L, S1, J1, S2, J2, MJ):
     """Ps Zeeman interaction (cached function).
 
     Paramters
@@ -20,14 +20,12 @@ def _zeeman(L, S1, J1, MJ1, S2, J2, MJ2):
         spin, state 1
     J1 : int
         total angular momentum, state 1
-    MJ1 : int
-        projection of the total angular momentum, state 1
     S2 : int
         spin, state 2
     J2 : int
         total angular momentum, state 2
-    MJ2 : int
-        projection of the total angular momentum, state 2
+    MJ : int
+        projection of the total angular momentum
 
     Returns
     -------
@@ -40,10 +38,10 @@ def _zeeman(L, S1, J1, MJ1, S2, J2, MJ2):
 
     """
     return float(
-        (-1.0) ** (L + MJ1)
+        (-1.0) ** (L + MJ)
         * ((-1.0) ** (S1 + S2) - 1.0)
         * np.sqrt(3.0 * (2 * J2 + 1) * (2 * J1 + 1))
-        * wigner_3j(J2, 1, J1, -MJ2, 0, MJ1)
+        * wigner_3j(J2, 1, J1, -MJ, 0, MJ)
         * wigner_6j(S2, L, J2, J1, 1, S1)
     )
 
@@ -71,9 +69,8 @@ def zeeman_interaction(state_1, state_2):
             state_1.L,
             state_1.S,
             state_1.J,
-            state_1.MJ,
             state_2.S,
             state_2.J,
-            state_2.MJ,
+            state_1.MJ,
         )
     return 0.0

@@ -51,7 +51,7 @@ class State:
 
         Parameters
         ----------
-        show_MJ=True : bool
+        show_MJ=True : bool, default=True
 
         Returns
         -------
