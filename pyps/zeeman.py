@@ -66,11 +66,6 @@ def zeeman_interaction(state_1, state_2):
         and state_1.MJ == state_2.MJ
     ):
         return _zeeman(
-            state_1.L,
-            state_1.S,
-            state_1.J,
-            state_2.S,
-            state_2.J,
-            state_1.MJ,
+            state_1.L, state_1.S, state_1.J, state_2.S, state_2.J, state_1.MJ,
         )
     return 0.0
