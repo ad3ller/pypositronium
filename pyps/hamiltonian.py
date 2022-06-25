@@ -58,6 +58,10 @@ class Hamiltonian(object):
         A list of instances of State.
     dims : (int, int)
         dimensions of the Hamiltonian matrix.
+    numerov : bool
+        use numerov for stark? (default=False)
+    m_alpha6 : bool
+        include m alpha^6 terms for s and p states?
     upper : bool (default=False)
         include upper matrix elements?
     sparse_format : str (default="csr")
@@ -85,13 +89,19 @@ class Hamiltonian(object):
         eigenvalues of the Hamiltonian for a range of magnetic fields.
     """
 
-    def __init__(self, basis, upper=False, sparse_format="csr"):
+    def __init__(
+        self, basis, numerov=False, m_alpha6=False, upper=False, sparse_format="csr"
+    ):
         """Initialize Hamiltonian.
 
         Parameters
         ----------
         basis : Basis
             list of State instances.
+        numerov : bool
+            use numerov for stark? (default=False)
+        m_alpha6 : bool
+            include m alpha^6 terms for s and p states?
         upper : bool (default=False)
             include upper matrix elements?  
         sparse_format : str (default="csr")
@@ -99,6 +109,8 @@ class Hamiltonian(object):
         """
         self.basis = basis
         self.dims = (self.basis.num_states, self.basis.num_states)
+        self.numerov = numerov
+        self.m_alpha6 = m_alpha6
         self.upper = upper
         self.sparse_format = sparse_format
         self.reset()
@@ -118,7 +130,9 @@ class Hamiltonian(object):
         """
         if self._e0_matrix is None:
             self._e0_matrix = sp.dia_matrix(
-                ([energy(x) for x in self.basis], 0), shape=self.dims, dtype=float
+                ([energy(x, m_alpha6=self.m_alpha6) for x in self.basis], 0),
+                shape=self.dims,
+                dtype=float,
             ).asformat(self.sparse_format)
         return self._e0_matrix
 
@@ -131,8 +145,6 @@ class Hamiltonian(object):
             electric field along z [atomic units]
         tqdm_kw={} : dict
             progress bar options, e.g, tqdm_kw={disable : True}
-        numerov=False : bool
-            use numerov method?
 
         Returns
         -------
@@ -140,15 +152,14 @@ class Hamiltonian(object):
         """
         if self._stark_z_matrix is None:
             tqdm_kw = kwargs.get("tqdm_kw", {})
-            numerov = kwargs.get("numerov", False)
             desc = "Stark"
-            if numerov:
+            if self.numerov:
                 desc += " (numerov)"
             mat = sp.dok_matrix(self.dims, dtype=float)
             for i in trange(self.basis.num_states, desc=desc, **tqdm_kw):
                 for j in range(i + 1, self.basis.num_states):
                     state_1, state_2 = self.basis[i], self.basis[j]
-                    si = stark_interaction(state_1, state_2, numerov=numerov)
+                    si = stark_interaction(state_1, state_2, numerov=self.numerov)
                     # upper
                     if self.upper:
                         mat[i, j] = si
@@ -350,7 +361,7 @@ class Hamiltonian(object):
 
         if isinstance(elements, Iterable):
             eigenvalues, amplitudes (i.e, the sum of the square of the
-                                    specified elements of the eigenvectors)
+                                     specified elements of the eigenvectors)
 
         Notes
         -----

@@ -11,14 +11,19 @@ given on page 117 of:
   | by Hans a. Bethe and Edwin E. Salpeter
   | ISBN 978-1-61427-622-7
 
+Corrections up to O(m alpha^6) can be added to the S and P states.
+
+  | A. Czarnecki, K. Melnikov, and A. Yelkhovsky, Phys. Rev. A **59**, 4316 (1999)
+  | https://doi.org/10.1103/PhysRevA.59.4316
+
 The Stark and Zeeman matrices are constructed using the equations given in:
 
-  | A. M. Alonso et al., Phys. Rev. A, 93, 012506 (2016)
+  | A. M. Alonso et al., Phys. Rev. A **93**, 012506 (2016)
   | https://dx.doi.org/10.1103/PhysRevA.93.012506
 
 Radial wavefunctions are obtained using the Numerov method, as described by:
 
-  | M. L. Zimmerman et al., Phys. Rev. A, 20, 2251 (1979)
+  | M. L. Zimmerman et al., Phys. Rev. A **20**, 2251 (1979)
   | https://dx.doi.org/10.1103/PhysRevA.20.2251
 
 Install

@@ -21,7 +21,7 @@ except ImportError:
 def _radial_integral(
     n1, l1, n2, l2, numerov=False, numerov_step=0.005, numerov_rmin=0.65
 ):
-    """Calculate the radial integral (cached).
+    """Radial integral (cached).
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ def _radial_integral(
 
 @lru_cache(CACHE_MAXSIZE)
 def _ang_integral(S, L1, J1, MJ1, L2, J2, MJ2):
-    """Calculate the angular integral (cached).
+    """Angular integral (cached).
 
     Parameters
     ----------

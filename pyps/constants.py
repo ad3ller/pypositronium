@@ -4,18 +4,21 @@ import functools
 
 CACHE_MAXSIZE = int(1e6)
 
-# CODATA 2014, DOI: 10.1103/RevModPhys.88.035009
+# CODATA 2018
+# https://doi.org/10.1103/RevModPhys.93.025010
+# http://physics.nist.gov/constants
 c = 299792458.0
-h = 6.626070040e-34
-hbar = 1.054571800e-34
-Ry = 10973731.568508
-e = 1.6021766208e-19
-m_e = 9.10938356e-31
-alpha = 7.2973525664e-3
-m_u = 1.660539040e-27
+h = 6.62607015e-34
+hbar = 1.054571817e-34
+Ry = 10973731.568160
+Ry_c = 3.2898419602508e15
+e = 1.602176634e-19
+m_e = 9.1093837015e-31
+alpha = 7.2973525693e-3
 En_h = alpha ** 2.0 * m_e * c ** 2.0
 a0 = hbar / (m_e * c * alpha)
 mu_B = e * hbar / (2.0 * m_e)
+gamma_e = 0.5772156649015329
 
 # positronium mass
 mass = 2.0 * m_e
@@ -123,7 +126,7 @@ def convert_au(value, dimension, units, reverse=False):
 
     Returns
     -------
-    converted value
+    float
 
     """
     if reverse:

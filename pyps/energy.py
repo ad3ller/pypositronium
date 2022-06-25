@@ -1,10 +1,21 @@
-"""Energy levels of positronium (approximate)."""
+"""Energy levels of positronium."""
 
 from .constants import alpha, mu_me, atomic_units
+from . import ma6
 
 
 def epsilon(state):
-    """Scaling of the fine structure shift."""
+    """Scaling of the fine structure shift.
+    
+    Parameters
+    ----------
+    state : State
+
+    Returns
+    -------
+    float
+    
+    """
     if state.S == 0:
         # singlet
         return 0.0
@@ -12,28 +23,36 @@ def epsilon(state):
         # triplet
         delta = int(state.L == 0)
         if state.J == state.L + 1:
-            omega = (3 * state.L + 4) / ((state.L + 1) * (2 * state.L + 3))
+            omega = (3 * state.L + 4.0) / ((state.L + 1) * (2 * state.L + 3))
         elif state.J == state.L:
-            omega = -1 / (state.L * (state.L + 1))
+            omega = -1.0 / (state.L * (state.L + 1))
         elif state.J == state.L - 1:
-            omega = -(3 * state.L - 1) / (state.L * (2 * state.L - 1))
+            omega = -(3 * state.L - 1.0) / (state.L * (2 * state.L - 1))
         else:
             raise ValueError(
                 "The total angular momentum 'J' must "
                 + "be in the range L - 1 < J < L + 1"
             )
-        return 7 / 6 * delta + (1 - delta) / (2 * (2 * state.L + 1)) * omega
+        return 7.0 / 6.0 * delta + (1 - delta) / (2.0 * (2 * state.L + 1)) * omega
     else:
         raise ValueError("The total spin quantum number 'S' must be 0 or 1.")
 
 
 def fine_structure(state):
-    """First-order fine structure shift for state [1].
+    """First-order fine structure shift for state.
+
+    Parameters
+    ----------
+    state : State
+
+    Returns
+    -------
+    float
 
     References
     ----------
-    [1] H. A. Bethe and E. E. Salpeter (1957)
-        Quantum Mechanics of One- and Two-Electron Systems
+    H. A. Bethe and E. E. Salpeter (1957)
+    Quantum Mechanics of One- and Two-Electron Systems
 
     """
     return (
@@ -43,6 +62,31 @@ def fine_structure(state):
 
 
 @atomic_units("energy")
-def energy(state):
-    """Field-free energy of state (includes fine structure)."""
+def energy(state, m_alpha6=False, **kwargs):
+    """Field-free energy of state.
+    
+    Parameters
+    ----------
+    state : State
+    m_alpha6 : bool
+        include the m alpha^6 terms for s and p states?
+    units : str
+
+    Returns
+    -------
+    energy : float
+            
+    """
+    if m_alpha6:
+        if state.L == 0:
+            return ma6.energy_s(state.n, state.J)
+        if state.L == 1:
+            if state.S == 0:
+                return ma6.energy_1p1(state.n)
+            if state.J == 2:
+                return ma6.energy_3p2(state.n)
+            if state.J == 1:
+                return ma6.energy_3p1(state.n)
+            if state.J == 0:
+                return ma6.energy_3p0(state.n)
     return -mu_me * (0.5 / (state.n ** 2) - fine_structure(state))

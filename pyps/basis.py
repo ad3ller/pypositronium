@@ -1,4 +1,4 @@
-"""Basis set of atomic quantum states."""
+"""Basis set of atomic states."""
 
 from collections import UserList
 from dataclasses import dataclass
@@ -8,7 +8,7 @@ from .energy import energy
 
 @dataclass
 class State:
-    """Dataclass for the quantum state ❘n, L, S, J, MJ⟩."""
+    """Dataclass to represent ❘n, L, S, J, MJ⟩."""
 
     n: int
     L: int
@@ -64,7 +64,7 @@ class State:
             return f"❘{self.n}, {self.L}, {self.S}, {self.J}⟩"
 
     def tex(self, show_MJ=True):
-        """Tex string of the form $n^{2S + 1}L_{J} (M_J = {MJ})$.
+        """Tex string of the form n^{2S + 1}L_{J} (M_J = {MJ}).
 
         Parameters
         ----------
@@ -76,11 +76,9 @@ class State:
 
         """
         L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L % 22)]
-        tex_str = f"${self.n}^{2* self.S + 1}{L}_{self.J}"
+        tex_str = f"{self.n}^{2* self.S + 1}{L}_{self.J}"
         if show_MJ:
-            tex_str += f"\\,(M_J = {self.MJ})$"
-        else:
-            tex_str += "$"
+            tex_str += f"\\,(M_J = {self.MJ})"
         return tex_str
 
 
