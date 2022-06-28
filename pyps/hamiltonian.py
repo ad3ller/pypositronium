@@ -59,10 +59,10 @@ class Hamiltonian(object):
     dims : (int, int)
         dimensions of the Hamiltonian matrix.
     numerov : bool
-        use numerov for stark? (default=False)
+        use numerov for stark?
     m_alpha6 : bool
-        include m alpha^6 terms for s and p states?
-    upper : bool (default=False)
+        include O(m alpha^6)terms for S and P states?
+    upper : bool
         include upper matrix elements?
     sparse_format : str (default="csr")
         sparse matrix format, e.g., "csr",  "csc" or "array".
@@ -90,7 +90,7 @@ class Hamiltonian(object):
     """
 
     def __init__(
-        self, basis, numerov=False, m_alpha6=False, upper=False, sparse_format="csr"
+        self, basis, numerov=False, m_alpha6=True, upper=False, sparse_format="csr"
     ):
         """Initialize Hamiltonian.
 
@@ -98,14 +98,15 @@ class Hamiltonian(object):
         ----------
         basis : Basis
             list of State instances.
-        numerov : bool
-            use numerov for stark? (default=False)
-        m_alpha6 : bool
-            include m alpha^6 terms for s and p states?
+        numerov : bool (default=False)
+            use numerov for stark?
+        m_alpha6 : bool (default=True)
+            include O(m alpha^6) terms for S and P states?
         upper : bool (default=False)
             include upper matrix elements?  
         sparse_format : str (default="csr")
             sparse matrix format.  E.g., "csr",  "csc" or "array".
+
         """
         self.basis = basis
         self.dims = (self.basis.num_states, self.basis.num_states)

@@ -94,11 +94,11 @@ class Basis(UserList):
     -------
     update(states):
         Update the list of states.
-    values(attribute, ndarray=False)
+    values(attribute, array=False)
         Attribute values of the basis.
-    where(function, ndarray=False)
+    where(function, array=False)
         Elements of the basis.
-    argwhere(function, ndarray=False)
+    argwhere(function, array=False)
         Indexes of the basis.
     extract_states(inds):
         Subset of the basis set.
@@ -149,14 +149,14 @@ class Basis(UserList):
         """Size of the basis set."""
         return len(self.data)
 
-    def values(self, attribute, ndarray=False):
+    def values(self, attribute, array=False):
         """Attribute values for all elements in the basis.
 
         Parameters
         ----------
         attribute : str
             e.g., n or J.
-        ndarray : bool
+        array : bool
 
         Returns
         -------
@@ -167,40 +167,41 @@ class Basis(UserList):
         >>> n_values = list(basis.values('n'))
 
         """
-        if ndarray:
+        if array:
             return np.array(list(self.values(attribute)))
         return (getattr(el, attribute) for el in self.data)
 
-    def where(self, function, ndarray=False):
+    def where(self, function, array=False):
         """Elements where function mapped to basis evaluates as True.
 
         Parameters
         ----------
         function : Function
-        ndarray : bool
+        array : bool
 
         Returns
         -------
         generator or numpy.ndarray
 
         """
-        if ndarray:
+        if array:
             return np.array(list(self.where(function)))
         return (x for x in self if function(x))
 
-    def argwhere(self, function, ndarray=False):
+    def argwhere(self, function, array=False):
         """Indexes where function mapped to basis evaluates as True.
 
         Parameters
         ----------
         function :: Function
+        array :: bool
 
         Returns
         -------
         inds : generator or numpy.ndarray
 
         """
-        if ndarray:
+        if array:
             return np.array(list(self.argwhere(function)))
         return (i for i, x in enumerate(self) if function(x))
 

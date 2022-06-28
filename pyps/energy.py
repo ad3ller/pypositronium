@@ -62,14 +62,14 @@ def fine_structure(state):
 
 
 @atomic_units("energy")
-def energy(state, m_alpha6=False, **kwargs):
+def energy(state, m_alpha6=True, **kwargs):
     """Field-free energy of state.
     
     Parameters
     ----------
     state : State
-    m_alpha6 : bool
-        include the m alpha^6 terms for s and p states?
+    m_alpha6 : bool (default=True)
+        include terms up to the O(m alpha^6) for S and P states?
     units : str
 
     Returns

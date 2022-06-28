@@ -1,4 +1,4 @@
-"""m alpha^6 corrections to the s and p states of positronium."""
+"""Corrections for the S and P states of positronium up to O(m alpha^6)."""
 
 import os
 import pkg_resources
@@ -34,7 +34,7 @@ def delta(a, b):
 
 
 def log_k0(n, l):
-    """ Bethe logarithms for s and p Rydberg States.
+    """ Bethe logarithms for S and P Rydberg States.
 
     Parameters
     ----------
@@ -69,7 +69,7 @@ def energy_average(n):
     
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
     
     https://arxiv.org/abs/hep-ph/9901394v2
@@ -120,7 +120,7 @@ def energy_hfs(n):
 
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
 
     https://arxiv.org/abs/hep-ph/9901394v2
@@ -159,7 +159,7 @@ def energy_s(n, J):
     
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
     
     https://arxiv.org/abs/hep-ph/9901394v2
@@ -182,7 +182,7 @@ def energy_3p2(n):
     
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
 
     https://arxiv.org/abs/hep-ph/9901394v2
@@ -222,7 +222,7 @@ def energy_3p1(n):
     
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
 
     https://arxiv.org/abs/hep-ph/9901394v2
@@ -260,7 +260,7 @@ def energy_3p0(n):
     
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
     
     https://arxiv.org/abs/hep-ph/9901394v2
@@ -300,7 +300,7 @@ def energy_1p1(n):
     
     Reference
     ---------
-    Positronium S state spectrum: analytic results at O(mα6)
+    Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
     
     https://arxiv.org/abs/hep-ph/9901394v2
