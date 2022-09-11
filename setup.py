@@ -5,7 +5,7 @@ setup(
     version="0.0.24",
     description="Calculate the Stark effect in positronium",
     url="",
-    author="A. Deller",
+    author="ad3ller",
     license="BSD 3-clause",
     packages=["pyps"],
     package_data={"pyps": ["data/*.npy"]},
