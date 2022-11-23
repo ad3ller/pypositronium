@@ -61,7 +61,7 @@ Basic Usage
 .. code:: ipython3
 
     >>> from pyps import Basis, Hamiltonian
-    >>> basis = Basis(n_values=range(1, 4))
+    >>> basis = Basis.create(n_values=range(1, 4))
     >>> print(f'number of basis states: {basis.num_states}')
 
 

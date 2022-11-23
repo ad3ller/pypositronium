@@ -92,21 +92,40 @@ class Basis(UserList):
 
     Methods
     -------
-    update(states):
-        Update the list of states.
+    create(n_values, L_values, S_values, MJ_values)
+        Create an [n,L,S,J,MJ] basis set.
     values(attribute, array=False)
         Attribute values of the basis.
-    where(function, array=False)
-        Elements of the basis.
-    argwhere(function, array=False)
-        Indexes of the basis.
+    where(condition, array=False)
+        Matching elements of the basis.
+    el(condition)
+        First matching element of basis.
+    argwhere(condition, array=False)
+        Matching indexes of the basis.
+    ix(condition)
+        First matching index of basis.
     extract_states(inds):
         Subset of the basis set.
 
     """
 
-    def __init__(
-        self,
+    def __init__(self, states):
+        """List of basis states.
+
+        Parameters
+        ----------
+        states : List of instances of State
+
+        Returns
+        -------
+        Basis
+
+        """
+        super().__init__(states)
+
+    @classmethod
+    def create(
+        cls,
         n_values=None,
         L_values=None,
         S_values=None,
@@ -114,7 +133,7 @@ class Basis(UserList):
         filter_function=None,
         sort_key=energy,
     ):
-        """Initialize basis set.
+        """Create an [n,L,S,J,MJ] basis set.
 
         Parameters
         ----------
@@ -125,24 +144,17 @@ class Basis(UserList):
         filter_function : None or Function
         sort_key : None or Function [default: energy()]
 
+        Returns
+        -------
+        Basis
+
         """
         states = generate_basis(n_values, L_values, S_values, MJ_values)
         if filter_function is not None:
             states = filter(filter_function, states)
         if sort_key is not None:
             states = sorted(states, key=sort_key)
-        self.update(states)
-
-    def update(self, states):
-        """Update the list of basis states.
-
-        Parameters
-        ----------
-        states : List of instances of State
-
-        """
-        super().__init__(states)
-        return self
+        return cls(states)
 
     @property
     def num_states(self):
@@ -155,7 +167,7 @@ class Basis(UserList):
         Parameters
         ----------
         attribute : str
-            e.g., n or J.
+            e.g., 'n' or 'J'.
         array : bool
 
         Returns
@@ -171,12 +183,12 @@ class Basis(UserList):
             return np.array(list(self.values(attribute)))
         return (getattr(el, attribute) for el in self.data)
 
-    def where(self, function, array=False):
-        """Elements where function mapped to basis evaluates as True.
+    def where(self, condition, array=False):
+        """Elements where condition mapped to basis evaluates as True.
 
         Parameters
         ----------
-        function : Function
+        condition : Function
         array : bool
 
         Returns
@@ -185,15 +197,29 @@ class Basis(UserList):
 
         """
         if array:
-            return np.array(list(self.where(function)))
-        return (x for x in self if function(x))
+            return np.array(list(self.where(condition)))
+        return (x for x in self.data if condition(x))
 
-    def argwhere(self, function, array=False):
-        """Indexes where function mapped to basis evaluates as True.
+    def el(self, condition):
+        """First element where condition mapped to basis evaluates as True.
 
         Parameters
         ----------
-        function :: Function
+        condition :: Function
+
+        Returns
+        -------
+        state : State
+
+        """
+        return next(self.where(condition))
+
+    def argwhere(self, condition, array=False):
+        """Indexes where condition mapped to basis evaluates as True.
+
+        Parameters
+        ----------
+        condition :: Function
         array :: bool
 
         Returns
@@ -202,8 +228,22 @@ class Basis(UserList):
 
         """
         if array:
-            return np.array(list(self.argwhere(function)))
-        return (i for i, x in enumerate(self) if function(x))
+            return np.array(list(self.argwhere(condition)))
+        return (i for i, x in enumerate(self.data) if condition(x))
+
+    def ix(self, condition):
+        """First index where condition mapped to basis evaluates as True.
+
+        Parameters
+        ----------
+        condition :: Function
+
+        Returns
+        -------
+        index : int
+
+        """
+        return next(self.argwhere(condition))
 
     def extract_states(self, inds):
         """Subset of the basis.
@@ -223,8 +263,7 @@ class Basis(UserList):
         if isinstance(inds, int):
             inds = [inds]
         states = np.array(self.data)[inds]
-        b = Basis().update(states)
-        return b
+        return Basis(states)
 
 
 def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):
