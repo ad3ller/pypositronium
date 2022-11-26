@@ -83,7 +83,12 @@ class State:
 
 
 class Basis(UserList):
-    """A UserList of State instances.
+    """A list of State instances.
+
+    Class Methods
+    -------------
+    build(n_values, L_values, S_values, MJ_values)
+        Build an [n,L,S,J,MJ] basis set.
 
     Attributes
     ----------
@@ -92,8 +97,6 @@ class Basis(UserList):
 
     Methods
     -------
-    create(n_values, L_values, S_values, MJ_values)
-        Create an [n,L,S,J,MJ] basis set.
     values(attribute, array=False)
         Attribute values of the basis.
     where(condition, array=False)
@@ -124,7 +127,7 @@ class Basis(UserList):
         super().__init__(states)
 
     @classmethod
-    def create(
+    def build(
         cls,
         n_values=None,
         L_values=None,
@@ -133,7 +136,7 @@ class Basis(UserList):
         filter_function=None,
         sort_key=energy,
     ):
-        """Create an [n,L,S,J,MJ] basis set.
+        """Build an [n,L,S,J,MJ] basis set.
 
         Parameters
         ----------
