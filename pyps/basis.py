@@ -29,7 +29,7 @@ class State:
         assert isinstance(self.n, int)
         assert self.n > 0
         assert isinstance(self.L, int)
-        assert self.L < self.n
+        assert 0 <= self.L < self.n
         assert isinstance(self.S, int)
         assert self.S in [0, 1]
         assert isinstance(self.J, int)
@@ -56,7 +56,6 @@ class State:
         Returns
         -------
         str
-
         """
         if show_MJ:
             return f"❘{self.n}, {self.L} {self.S}, {self.J}, {self.MJ}⟩"
@@ -107,9 +106,10 @@ class Basis(UserList):
         Matching indexes of the basis.
     ix(condition)
         First matching index of basis.
-    extract_states(inds):
+    subset(condition)
         Subset of the basis set.
-
+    extract_states(inds):
+        Extract basis[inds].
     """
 
     def __init__(self, states):
@@ -122,7 +122,6 @@ class Basis(UserList):
         Returns
         -------
         Basis
-
         """
         super().__init__(states)
 
@@ -150,7 +149,6 @@ class Basis(UserList):
         Returns
         -------
         Basis
-
         """
         states = generate_basis(n_values, L_values, S_values, MJ_values)
         if filter_function is not None:
@@ -180,7 +178,6 @@ class Basis(UserList):
         Examples
         --------
         >>> n_values = list(basis.values('n'))
-
         """
         if array:
             return np.array(list(self.values(attribute)))
@@ -197,7 +194,6 @@ class Basis(UserList):
         Returns
         -------
         generator or numpy.ndarray
-
         """
         if array:
             return np.array(list(self.where(condition)))
@@ -213,7 +209,6 @@ class Basis(UserList):
         Returns
         -------
         state : State
-
         """
         return next(self.where(condition))
 
@@ -228,7 +223,6 @@ class Basis(UserList):
         Returns
         -------
         inds : generator or numpy.ndarray
-
         """
         if array:
             return np.array(list(self.argwhere(condition)))
@@ -244,9 +238,24 @@ class Basis(UserList):
         Returns
         -------
         index : int
-
         """
         return next(self.argwhere(condition))
+
+    def subset(self, condition):
+        """Subset of basis where condition mapped to basis evaluates as True.
+
+        Parameters
+        ----------
+        condition : Function
+
+        Returns
+        -------
+        Basis
+            A new instance of :class:`basis.Basis` that contains only the states
+            that satisy condition.
+        """
+        states = self.where(condition)
+        return Basis(states)
 
     def extract_states(self, inds):
         """Subset of the basis.
@@ -261,7 +270,6 @@ class Basis(UserList):
         Basis
             A new instance of :class:`basis.Basis` that contains only the states
             corresponding to the indices in `inds`.
-
         """
         if isinstance(inds, int):
             inds = [inds]
@@ -282,7 +290,6 @@ def generate_basis(n_values, L_values=None, S_values=None, MJ_values=None):
     Yields
     ------
     State
-
     """
     if n_values is None:
         return []

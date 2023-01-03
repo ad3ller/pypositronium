@@ -79,7 +79,6 @@ def atomic_units(dimension, nargs=1):
 
     >>> func(1.0, units='eV')
     27.211386470176983
-
     """
     data = conversion_data[dimension]
 
@@ -111,8 +110,8 @@ def atomic_units(dimension, nargs=1):
     return decorator
 
 
-def convert_au(value, dimension, units, reverse=False):
-    """Convert 'value' in atomic units to 'units', or the reverse.
+def convert_au(value, dimension, units):
+    """Convert 'value' from atomic units.
 
     Parameters
     ----------
@@ -121,15 +120,27 @@ def convert_au(value, dimension, units, reverse=False):
         e.g., 'energy' or 'length'
     units : str
         e.g., 'joule' or 'SI'
-    reverse : bool
-        convert from units to atomic_units
 
     Returns
     -------
     float
-
     """
-    if reverse:
-        return value / atomic_units(dimension)(lambda: 1)(units=units)
-    else:
-        return atomic_units(dimension)(lambda: value)(units=units)
+    return atomic_units(dimension)(lambda: value)(units=units)
+
+
+def revert_au(value, dimension, units):
+    """Revert 'value' to atomic units.
+
+    Parameters
+    ----------
+    value : Number or numpy.ndarray()
+    dimension : str
+        e.g., 'energy' or 'length'
+    units : str
+        e.g., 'joule' or 'SI'
+
+    Returns
+    -------
+    float
+    """
+    return value / atomic_units(dimension)(lambda: 1)(units=units)

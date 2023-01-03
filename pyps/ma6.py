@@ -34,7 +34,7 @@ def delta(a, b):
 
 
 def log_k0(n, l):
-    """ Bethe logarithms for S and P Rydberg States.
+    """Bethe logarithms for S and P Rydberg States.
 
     Parameters
     ----------
@@ -44,7 +44,7 @@ def log_k0(n, l):
     Returns
     -------
     float
-    
+
     Reference
     ---------
     Bethe Logarithms for Rydberg States: Numerical Values for n ≤ 200
@@ -58,7 +58,7 @@ def log_k0(n, l):
 
 def energy_average(n):
     """Spin-averaged energy of the S states.
-    
+
     Parameters
     ----------
     n : int
@@ -66,14 +66,14 @@ def energy_average(n):
     Returns
     -------
     float [au]
-    
+
     Reference
     ---------
     Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
-    
+
     https://arxiv.org/abs/hep-ph/9901394v2
-    
+
     Eqs. 92 & 95
     """
     return (
@@ -109,11 +109,11 @@ def energy_average(n):
 
 def energy_hfs(n):
     """Hyperfine splitting of the S states.
-    
+
     Parameters
     ----------
     n : int
-    
+
     Returns
     -------
     float [au]
@@ -124,7 +124,7 @@ def energy_hfs(n):
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
 
     https://arxiv.org/abs/hep-ph/9901394v2
-    
+
     Eqs. 93 & 95
     """
     return (
@@ -156,14 +156,14 @@ def energy_s(n, J):
     Returns
     -------
     float [au]
-    
+
     Reference
     ---------
     Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
-    
+
     https://arxiv.org/abs/hep-ph/9901394v2
-    
+
     Eq. 91
     """
     return energy_average(n) + (0.25 - delta(J, 0)) * energy_hfs(n)
@@ -171,7 +171,7 @@ def energy_s(n, J):
 
 def energy_3p2(n):
     """Energy of the triplet P states (J=2).
-    
+
     Parameters
     ----------
     n : int
@@ -179,7 +179,7 @@ def energy_3p2(n):
     Returns
     -------
     float [au]
-    
+
     Reference
     ---------
     Positronium S state spectrum: analytic results at O(m alpha^6)
@@ -211,7 +211,7 @@ def energy_3p2(n):
 
 def energy_3p1(n):
     """Energy of the triplet P states (J=1).
-    
+
     Parameters
     ----------
     n : int
@@ -219,7 +219,7 @@ def energy_3p1(n):
     Returns
     -------
     float [au]
-    
+
     Reference
     ---------
     Positronium S state spectrum: analytic results at O(m alpha^6)
@@ -249,7 +249,7 @@ def energy_3p1(n):
 
 def energy_3p0(n):
     """Energy of the triplet P states (J=0).
-    
+
     Parameters
     ----------
     n : int
@@ -257,12 +257,12 @@ def energy_3p0(n):
     Returns
     -------
     float [au]
-    
+
     Reference
     ---------
     Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
-    
+
     https://arxiv.org/abs/hep-ph/9901394v2
 
     Eq. C1
@@ -289,7 +289,7 @@ def energy_3p0(n):
 
 def energy_1p1(n):
     """Energy of the singlet P states (J=1).
-    
+
     Parameters
     ----------
     n : int
@@ -297,12 +297,12 @@ def energy_1p1(n):
     Returns
     -------
     float [au]
-    
+
     Reference
     ---------
     Positronium S state spectrum: analytic results at O(m alpha^6)
     Andrzej Czarnecki, Kirill Melnikov and Alexander Yelkhovsky (1999)
-    
+
     https://arxiv.org/abs/hep-ph/9901394v2
 
     Eq. C1

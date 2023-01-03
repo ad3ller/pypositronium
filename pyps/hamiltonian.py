@@ -23,7 +23,6 @@ def eigenenergies(M, units=None, **kwargs):
     Returns
     -------
     numpy.ndarray
-
     """
     if sp.issparse(M):
         M = M.toarray()
@@ -42,7 +41,6 @@ def eigenstates(M, units=None, **kwargs):
     Returns
     -------
     numpy.ndarray
-
     """
     if sp.issparse(M):
         M = M.toarray()
@@ -50,7 +48,7 @@ def eigenstates(M, units=None, **kwargs):
 
 
 class Hamiltonian(object):
-    """Hamiltonian
+    """Hamiltonian.
 
     Attributes
     ----------
@@ -103,10 +101,9 @@ class Hamiltonian(object):
         m_alpha6 : bool (default=True)
             include O(m alpha^6) terms for S and P states?
         upper : bool (default=False)
-            include upper matrix elements?  
+            include upper matrix elements? (not needed for linalg.eigh)
         sparse_format : str (default="csr")
             sparse matrix format.  E.g., "csr",  "csc" or "array".
-
         """
         self.basis = basis
         self.dims = (self.basis.num_states, self.basis.num_states)
@@ -121,6 +118,7 @@ class Hamiltonian(object):
         self._e0_matrix = None
         self._stark_z_matrix = None
         self._zeeman_matrix = None
+        return self
 
     def e0(self):
         """Field-free Hamiltonian matrix.
@@ -256,7 +254,6 @@ class Hamiltonian(object):
         Returns
         -------
         (eigenvalues : numpy.ndarray, eigenvectors : numpy.ndarray)
-
         """
         Fz = electric_field * e * a0 / En_h
         Bz = magnetic_field * mu_B / En_h
@@ -295,7 +292,6 @@ class Hamiltonian(object):
         Notes
         -----
         A large map with eigenvectors can take up a LOT of memory.
-
         """
         tqdm_kw = kwargs.get("tqdm_kw", {})
         # initialise output arrays
@@ -367,7 +363,6 @@ class Hamiltonian(object):
         Notes
         -----
         A large map with eigenvectors can take up a LOT of memory.
-
         """
         tqdm_kw = kwargs.get("tqdm_kw", {})
         # initialise output arrays

@@ -53,7 +53,6 @@ def _radial_integral(
     63.496017658724504
 
     Nb.  If numerov fails, automatically reverts to sympy
-
     """
     if numerov:
         ri = float(radial_numerov(n1, l1, n2, l2, step=numerov_step, rmin=numerov_rmin))
@@ -94,7 +93,6 @@ def _ang_integral(S, L1, J1, MJ1, L2, J2, MJ2):
     Returns
     -------
     float
-
     """
     return float(
         (-1.0) ** (S + 1 + MJ2)
@@ -104,7 +102,7 @@ def _ang_integral(S, L1, J1, MJ1, L2, J2, MJ2):
     )
 
 
-def stark_interaction(state_1, state_2, numerov=False):
+def stark_interaction(state_1, state_2, numerov=False, lru_cache=True):
     """Stark interaction between two states.
 
     Paramters
@@ -113,30 +111,48 @@ def stark_interaction(state_1, state_2, numerov=False):
     state_2 : State
     numerov=False : bool
         use the numerov method?
+    lru_cache=True : bool
+        use lru chache?
 
     Returns
     -------
     float
-
     """
     if (
         abs(state_1.L - state_2.L) == 1
         and state_1.S == state_2.S
         and state_1.MJ == state_2.MJ
     ):
-        return (
-            _ang_integral(
-                state_1.S,
-                state_1.L,
-                state_1.J,
-                state_1.MJ,
-                state_2.L,
-                state_2.J,
-                state_2.MJ,
+        if lru_cache:
+            return (
+                _ang_integral(
+                    state_1.S,
+                    state_1.L,
+                    state_1.J,
+                    state_1.MJ,
+                    state_2.L,
+                    state_2.J,
+                    state_2.MJ,
+                )
+                * _radial_integral(
+                    state_1.n, state_1.L, state_2.n, state_2.L, numerov=numerov
+                )
+                / mu_me
             )
-            * _radial_integral(
-                state_1.n, state_1.L, state_2.n, state_2.L, numerov=numerov
+        else:
+            return (
+                _ang_integral.__wrapped__(
+                    state_1.S,
+                    state_1.L,
+                    state_1.J,
+                    state_1.MJ,
+                    state_2.L,
+                    state_2.J,
+                    state_2.MJ,
+                )
+                * _radial_integral.__wrapped__(
+                    state_1.n, state_1.L, state_2.n, state_2.L, numerov=numerov
+                )
+                / mu_me
             )
-            / mu_me
-        )
     return 0.0

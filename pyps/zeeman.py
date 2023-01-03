@@ -10,7 +10,7 @@ from functools import lru_cache
 
 @lru_cache(CACHE_MAXSIZE)
 def _zeeman(L, S1, J1, S2, J2, MJ):
-    """Ps Zeeman interaction (cached function).
+    """Ps Zeeman interaction (cached).
 
     Paramters
     ---------
@@ -34,8 +34,7 @@ def _zeeman(L, S1, J1, S2, J2, MJ):
     References
     ----------
     C. D. Dermer and J. C. Weisheit (1989)
-    Phys Rev A, 40, 5526. doi: 10.1103/physreva.40.5526. 
-
+    Phys Rev A, 40, 5526. doi: 10.1103/physreva.40.5526.
     """
     return float(
         (-1.0) ** (L + MJ)
@@ -46,18 +45,18 @@ def _zeeman(L, S1, J1, S2, J2, MJ):
     )
 
 
-def zeeman_interaction(state_1, state_2):
+def zeeman_interaction(state_1, state_2, lru_cache=True):
     """Zeeman interaction between two states.
 
     Paramters
     ---------
     state_1 : State
     state_2 : State
+    lru_cache=True : bool
 
     Returns
     -------
     float
-
     """
     if (
         state_1.S != state_2.S
@@ -65,7 +64,12 @@ def zeeman_interaction(state_1, state_2):
         and state_1.L == state_2.L
         and state_1.MJ == state_2.MJ
     ):
-        return _zeeman(
-            state_1.L, state_1.S, state_1.J, state_2.S, state_2.J, state_1.MJ,
-        )
+        if lru_cache:
+            return _zeeman(
+                state_1.L, state_1.S, state_1.J, state_2.S, state_2.J, state_1.MJ,
+            )
+        else:
+            return _zeeman.__wrapped__(
+                state_1.L, state_1.S, state_1.J, state_2.S, state_2.J, state_1.MJ,
+            )
     return 0.0
