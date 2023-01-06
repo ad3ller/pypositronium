@@ -1,17 +1,16 @@
 pypositronium
 =============
 
-Calculate the energy levels of positronium in parallel electric
-and magnetic fields.
+Positronium in parallel electric and magnetic fields.
 
 Fine structure is included to first order using the formula
-given on page 117 of:
+given on page 117 of
 
   | Quantum Mechanics of One- And Two-Electron Atoms
   | by Hans a. Bethe and Edwin E. Salpeter
   | ISBN 978-1-61427-622-7
 
-with terms up to :math:`\mathcal{O}(m \alpha^6)` for the S and P states:
+with higher order terms for the S and P states from
 
   | A. Czarnecki, K. Melnikov, and A. Yelkhovsky, Phys. Rev. A **59**, 4316 (1999)
   | https://doi.org/10.1103/PhysRevA.59.4316
