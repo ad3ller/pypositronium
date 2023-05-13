@@ -66,10 +66,20 @@ def zeeman_interaction(state_1, state_2, lru_cache=True):
     ):
         if lru_cache:
             return _zeeman(
-                state_1.L, state_1.S, state_1.J, state_2.S, state_2.J, state_1.MJ,
+                state_1.L,
+                state_1.S,
+                state_1.J,
+                state_2.S,
+                state_2.J,
+                state_1.MJ,
             )
         else:
             return _zeeman.__wrapped__(
-                state_1.L, state_1.S, state_1.J, state_2.S, state_2.J, state_1.MJ,
+                state_1.L,
+                state_1.S,
+                state_1.J,
+                state_2.S,
+                state_2.J,
+                state_1.MJ,
             )
     return 0.0

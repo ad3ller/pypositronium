@@ -66,8 +66,8 @@ def fine_structure(n, L, S, J):
     Quantum Mechanics of One- and Two-Electron Systems
     """
     return (
-        11 / 32 * n ** -4 + (_epsilon(L, S, J) - 1.0 / (2 * L + 1)) * 1.0 / (n ** 3.0)
-    ) * alpha ** 2.0
+        11 / 32 * n**-4 + (_epsilon(L, S, J) - 1.0 / (2 * L + 1)) * 1.0 / (n**3.0)
+    ) * alpha**2.0
 
 
 @atomic_units("energy")
@@ -98,5 +98,5 @@ def energy(state, m_alpha6=True, **kwargs):
             if state.J == 0:
                 return ma6.energy_3p0(state.n)
     return -mu_me * (
-        0.5 / (state.n ** 2) - fine_structure(state.n, state.L, state.S, state.J)
+        0.5 / (state.n**2) - fine_structure(state.n, state.L, state.S, state.J)
     )

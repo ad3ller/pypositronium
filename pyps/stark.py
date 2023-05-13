@@ -65,7 +65,7 @@ def _radial_integral(
             )
     var("r")
     return float(
-        integrate(R_nl(n1, l1, r) * r ** 3 * R_nl(n2, l2, r), (r, 0, oo)).evalf()
+        integrate(R_nl(n1, l1, r) * r**3 * R_nl(n2, l2, r), (r, 0, oo)).evalf()
     )
 
 
