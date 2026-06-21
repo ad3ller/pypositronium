@@ -28,28 +28,19 @@ Radial wavefunctions are obtained using the Numerov method, as described by:
 Install
 -------
 
-python 3.8+
+python 3.14+
 
-The main requirements can be installed with `conda <https://anaconda.org/>`_:
-
-.. code-block:: bash
-
-   conda install numpy scipy sympy tqdm
-
-
-Optional (speed up high-n calculations): 
-Build and install `numerov <https://github.com/ad3ller/numerov>`_.
-
-Some of the example notebooks use `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
-
-Finally, clone the souce code and then install the package
-using setuptools.
+Clone the source code and install using `pip`.
 
 .. code-block:: bash
 
    git clone https://github.com/ad3ller/pypositronium
    cd ./pypositronium
-   python setup.py install
+   pip install .
+
+The package depends on `numpy`, `scipy`, `numba`, `sympy` and `tqdm`.  
+The notebooks also depend on `matplotlib`, `joblib`, `version_information`, `tabulate` and `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
+Install using `pip install -U ".[examples]"`.
 
 
 Basic Usage

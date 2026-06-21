@@ -40,9 +40,9 @@ conversion_data["energy"]["SI"] = conversion_data["energy"]["joule"] = conversio
 conversion_data["energy"]["electronvolt"] = conversion_data["energy"]["eV"] = En_h / e
 conversion_data["energy"]["Hz"] = En_h / h
 conversion_data["energy"]["/m"] = En_h / (c * h)
-conversion_data["energy"]["/cm"] = conversion_data["energy"][
-    "wavenumbers"
-] = conversion_data["energy"]["kayser"] = (conversion_data["energy"]["/m"] / 100.0)
+conversion_data["energy"]["/cm"] = conversion_data["energy"]["wavenumbers"] = (
+    conversion_data["energy"]["kayser"]
+) = (conversion_data["energy"]["/m"] / 100.0)
 
 # length
 conversion_data["length"] = dict()
@@ -53,9 +53,9 @@ conversion_data["length"]["cm"] = conversion_data["length"]["m"] * 100.0
 
 # electric field
 conversion_data["electric field"] = dict()
-conversion_data["electric field"]["SI"] = conversion_data["electric field"][
-    "V/m"
-] = En_h / (e * a0)
+conversion_data["electric field"]["SI"] = conversion_data["electric field"]["V/m"] = (
+    En_h / (e * a0)
+)
 conversion_data["electric field"]["V/cm"] = (
     conversion_data["electric field"]["V/m"] * 100.0
 )

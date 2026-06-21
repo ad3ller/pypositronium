@@ -1,20 +1,17 @@
 """Corrections for the S and P states of positronium up to O(m alpha^6)."""
 
-import os
-import pkg_resources
+from importlib import resources
 import numpy as np
 from math import log, pi
 from scipy.special import psi, zeta
 from .constants import alpha, gamma_e
 
-DATA_PATH = pkg_resources.resource_filename("pyps", "data/")
-
 # Bethe logarithm data
-try:
-    log_k0_fil = os.path.join(DATA_PATH, "log_k0_data.npy")
-    log_k0_data = np.load(log_k0_fil)
-except:
-    log_k0_fil = os.path.join(DATA_PATH, "log_k0_data.dat")
+from importlib import resources
+import numpy as np
+
+log_k0_res = resources.files("pyps").joinpath("data", "log_k0_data.dat")
+with resources.as_file(log_k0_res) as log_k0_fil:
     log_k0_data = np.loadtxt(log_k0_fil)
 
 
@@ -192,9 +189,7 @@ def energy_3p2(n):
     return (
         -1.0 / (4.0 * n**2.0)
         - alpha**2.0 / (4.0 * n**3.0) * (13.0 / 30.0 - 11.0 / (16.0 * n))
-        - alpha**3.0
-        / (8.0 * pi * n**3.0)
-        * (4.0 / 45.0 + 16.0 / 3.0 * log_k0(n, 1))
+        - alpha**3.0 / (8.0 * pi * n**3.0) * (4.0 / 45.0 + 16.0 / 3.0 * log_k0(n, 1))
         + alpha**4.0
         / n**3.0
         * (
@@ -270,9 +265,7 @@ def energy_3p0(n):
     return (
         -1.0 / (4.0 * n**2.0)
         - alpha**2.0 / (4.0 * n**3.0) * (4.0 / 3.0 - 11.0 / (16.0 * n))
-        - alpha**3.0
-        / (8.0 * pi * n**3.0)
-        * (25.0 / 18.0 + 16.0 / 3.0 * log_k0(n, 1))
+        - alpha**3.0 / (8.0 * pi * n**3.0) * (25.0 / 18.0 + 16.0 / 3.0 * log_k0(n, 1))
         + alpha**4.0
         / n**3.0
         * (
@@ -310,9 +303,7 @@ def energy_1p1(n):
     return (
         -1.0 / (4.0 * n**2.0)
         - alpha**2.0 / (4.0 * n**3.0) * (2.0 / 3.0 - 11.0 / (16.0 * n))
-        - alpha**3.0
-        / (8.0 * pi * n**3.0)
-        * (7.0 / 18.0 + 16.0 / 3.0 * log_k0(n, 1))
+        - alpha**3.0 / (8.0 * pi * n**3.0) * (7.0 / 18.0 + 16.0 / 3.0 * log_k0(n, 1))
         + alpha**4.0
         / n**3.0
         * (
