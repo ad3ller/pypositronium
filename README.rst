@@ -39,7 +39,7 @@ Clone the source code and install using `pip`.
    pip install .
 
 The package depends on `numpy`, `scipy`, `numba`, `sympy` and `tqdm`.  
-The notebooks also depend on `matplotlib`, `joblib`, `version_information`, `tabulate` and `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
+The example notebooks also depend on `matplotlib`, `joblib`, `version_information`, `tabulate` and `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
 Install using `pip install -U ".[examples]"`.
 
 
