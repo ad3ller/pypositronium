@@ -1,11 +1,12 @@
 """Zeeman effect for positronium."""
 
-import numpy as np
-from sympy.physics.wigner import wigner_3j, wigner_6j
-from .constants import CACHE_MAXSIZE
-
 # cache decorator
 from functools import lru_cache
+
+import numpy as np
+from sympy.physics.wigner import wigner_3j, wigner_6j
+
+from .constants import CACHE_MAXSIZE
 
 
 @lru_cache(CACHE_MAXSIZE)

@@ -42,6 +42,7 @@ The package depends on `numpy`, `scipy`, `numba`, `sympy` and `tqdm`.
 The example notebooks also depend on `matplotlib`, `joblib`, `version_information`, `tabulate` and `smtools <https://github.com/ad3ller/Stark-map-tools>`_.
 Install using `pip install -U ".[examples]"`.
 
+Alternatively, `pyps` can be installed into an isolated virtual environment using `uv`.
 
 Basic Usage
 -----------
@@ -50,7 +51,7 @@ Basic Usage
 
 .. code:: ipython3
 
-    >>> from pyps import Basis, Hamiltonian
+    >>> from pyps import Basis
     >>> basis = Basis.build(n_values=range(1, 4))
     >>> print(f'number of basis states: {basis.num_states}')
 
@@ -84,6 +85,7 @@ The `Hamiltonian` class is initialised using a basis.
 
 .. code:: ipython3
 
+    >>> from pyps import Hamiltonian
     >>> # initialize
     >>> H = Hamiltonian(basis)
 

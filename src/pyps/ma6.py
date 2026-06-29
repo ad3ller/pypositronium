@@ -1,15 +1,14 @@
 """Corrections for the S and P states of positronium up to O(m alpha^6)."""
 
 from importlib import resources
-import numpy as np
 from math import log, pi
+
+import numpy as np
 from scipy.special import psi, zeta
+
 from .constants import alpha, gamma_e
 
 # Bethe logarithm data
-from importlib import resources
-import numpy as np
-
 log_k0_res = resources.files("pyps").joinpath("data", "log_k0_data.dat")
 with resources.as_file(log_k0_res) as log_k0_fil:
     log_k0_data = np.loadtxt(log_k0_fil)

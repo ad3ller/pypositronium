@@ -1,13 +1,15 @@
 """Stark effect for positronium."""
 
 import warnings
-import numpy as np
 from functools import lru_cache
+
+import numpy as np
 from sympy import integrate, oo, var
 from sympy.physics.hydrogen import R_nl
 from sympy.physics.wigner import wigner_3j, wigner_6j
+
+from .numerov import radial_integral as radial_numerov
 from .constants import CACHE_MAXSIZE, mu_me
-from . import numerov as nmv
 
 
 @lru_cache(CACHE_MAXSIZE)
@@ -48,7 +50,7 @@ def _radial_integral(
     Nb.  If numerov fails, automatically reverts to sympy
     """
     if numerov:
-        ri = nmv.radial_integral(n1, l1, n2, l2, step=numerov_step, rmin=numerov_rmin)
+        ri = radial_numerov(n1, l1, n2, l2, step=numerov_step, rmin=numerov_rmin)
         if not np.isnan(ri):
             return ri
         else:

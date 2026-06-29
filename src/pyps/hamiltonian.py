@@ -1,14 +1,16 @@
 """Hamiltonian for positronium in electric and magnetic fields."""
 
 from collections.abc import Iterable
+
 import numpy as np
-from scipy import linalg
 import scipy.sparse as sp
+from scipy import linalg
 from tqdm import trange
+
+from .constants import En_h, a0, atomic_units, e, mu_B
 from .energy import energy
 from .stark import stark_interaction
 from .zeeman import zeeman_interaction
-from .constants import atomic_units, mu_B, En_h, e, a0
 
 
 @atomic_units("energy")

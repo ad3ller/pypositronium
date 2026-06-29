@@ -1,7 +1,7 @@
 """Energy levels of positronium."""
 
-from .constants import alpha, mu_me, atomic_units
 from . import ma6
+from .constants import alpha, atomic_units, mu_me
 
 
 def _epsilon(L, S, J):

@@ -2,7 +2,9 @@
 
 from collections import UserList
 from dataclasses import dataclass
+
 import numpy as np
+
 from .energy import energy
 
 
@@ -75,7 +77,7 @@ class State:
 
         """
         L = "SPDFGHIKLMNOQRTUVWXYZ"[int(self.L % 22)]
-        tex_str = f"{self.n}^{2* self.S + 1}{L}_{self.J}"
+        tex_str = f"{self.n}^{2 * self.S + 1}{L}_{self.J}"
         if show_MJ:
             tex_str += f"\\,(M_J = {self.MJ})"
         return tex_str
